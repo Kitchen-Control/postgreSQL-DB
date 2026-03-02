@@ -445,16 +445,16 @@ INSERT INTO order_details (order_id, product_id, quantity) VALUES
 -- ============================================
 INSERT INTO log_batches (plan_id, product_id, quantity, production_date, expiry_date, status, type, created_at) VALUES 
 -- PURCHASE batches (Nhập mua nguyên liệu)
-(NULL, 1, 500, CURRENT_DATE, CURRENT_DATE + INTERVAL '180 days', 'DONE', 'PURCHASE', CURRENT_TIMESTAMP),  -- Bột mì
-(NULL, 2, 100, CURRENT_DATE, CURRENT_DATE + INTERVAL '7 days', 'DONE', 'PURCHASE', CURRENT_TIMESTAMP),    -- Thịt bò
-(NULL, 3, 80, CURRENT_DATE - INTERVAL '10 days', CURRENT_DATE + INTERVAL '20 days', 'DONE', 'PURCHASE', CURRENT_TIMESTAMP - INTERVAL '10 days'), -- Phô mai
-(NULL, 4, 50, CURRENT_DATE - INTERVAL '3 days', CURRENT_DATE + INTERVAL '2 days', 'DONE', 'PURCHASE', CURRENT_TIMESTAMP - INTERVAL '3 days'),  -- Cà chua sắp hết hạn
-(NULL, 5, 1000, CURRENT_DATE - INTERVAL '30 days', CURRENT_DATE + INTERVAL '335 days', 'DONE', 'PURCHASE', CURRENT_TIMESTAMP - INTERVAL '30 days'), -- Gạo
+(NULL, 1, 10000, CURRENT_DATE, CURRENT_DATE + INTERVAL '180 days', 'DONE', 'PURCHASE', CURRENT_TIMESTAMP),  -- Bột mì
+(NULL, 2, 2000, CURRENT_DATE, CURRENT_DATE + INTERVAL '7 days', 'DONE', 'PURCHASE', CURRENT_TIMESTAMP),    -- Thịt bò
+(NULL, 3, 1500, CURRENT_DATE - INTERVAL '10 days', CURRENT_DATE + INTERVAL '20 days', 'DONE', 'PURCHASE', CURRENT_TIMESTAMP - INTERVAL '10 days'), -- Phô mai
+(NULL, 4, 1000, CURRENT_DATE - INTERVAL '3 days', CURRENT_DATE + INTERVAL '2 days', 'DONE', 'PURCHASE', CURRENT_TIMESTAMP - INTERVAL '3 days'),  -- Cà chua sắp hết hạn
+(NULL, 5, 50000, CURRENT_DATE - INTERVAL '30 days', CURRENT_DATE + INTERVAL '335 days', 'DONE', 'PURCHASE', CURRENT_TIMESTAMP - INTERVAL '30 days'), -- Gạo
 
 -- PRODUCTION batches (Sản xuất)
-(1, 8, 50, CURRENT_DATE, CURRENT_DATE + INTERVAL '1 day', 'DONE', 'PRODUCTION', CURRENT_TIMESTAMP),       -- Pizza từ plan 1
-(1, 9, 30, CURRENT_DATE, CURRENT_DATE + INTERVAL '1 day', 'PROCESSING', 'PRODUCTION', CURRENT_TIMESTAMP), -- Cơm hộp đang làm
-(3, 8, 100, CURRENT_DATE - INTERVAL '7 days', CURRENT_DATE - INTERVAL '6 days', 'DONE', 'PRODUCTION', CURRENT_TIMESTAMP - INTERVAL '7 days'), -- Pizza tuần trước
+(1, 8, 5000, CURRENT_DATE, CURRENT_DATE + INTERVAL '1 day', 'DONE', 'PRODUCTION', CURRENT_TIMESTAMP),       -- Pizza từ plan 1
+(1, 9, 3000, CURRENT_DATE, CURRENT_DATE + INTERVAL '1 day', 'PROCESSING', 'PRODUCTION', CURRENT_TIMESTAMP), -- Cơm hộp đang làm
+(3, 8, 8000, CURRENT_DATE - INTERVAL '7 days', CURRENT_DATE - INTERVAL '6 days', 'DONE', 'PRODUCTION', CURRENT_TIMESTAMP - INTERVAL '7 days'), -- Pizza tuần trước
 
 -- EXPIRED batch
 (NULL, 4, 20, CURRENT_DATE - INTERVAL '10 days', CURRENT_DATE - INTERVAL '2 days', 'EXPIRED', 'PURCHASE', CURRENT_TIMESTAMP - INTERVAL '10 days'), -- Cà chua hết hạn
@@ -467,16 +467,16 @@ INSERT INTO log_batches (plan_id, product_id, quantity, production_date, expiry_
 -- Cases: Nguyên liệu, Thành phẩm, Số lượng khác nhau, Sắp hết hạn, Còn nhiều
 -- ============================================
 INSERT INTO inventories (product_id, batch_id, quantity, expiry_date) VALUES 
-(1, 1, 450, CURRENT_DATE + INTERVAL '180 days'),   -- Bột mì còn nhiều
-(2, 2, 85, CURRENT_DATE + INTERVAL '7 days'),      -- Thịt bò
-(3, 3, 60, CURRENT_DATE + INTERVAL '20 days'),     -- Phô mai
-(4, 4, 30, CURRENT_DATE + INTERVAL '2 days'),      -- Cà chua sắp hết hạn
-(5, 5, 950, CURRENT_DATE + INTERVAL '335 days'),   -- Gạo còn rất nhiều
-(8, 6, 40, CURRENT_DATE + INTERVAL '1 day'),       -- Pizza còn 40 (đã bán 10)
-(9, 7, 25, CURRENT_DATE + INTERVAL '1 day'),       -- Cơm hộp đang làm dở
-(8, 8, 80, CURRENT_DATE - INTERVAL '6 days'),      -- Pizza tuần trước còn 80
-(4, 9, 0, CURRENT_DATE - INTERVAL '2 days'),       -- Cà chua hết hạn (quantity = 0)
-(10, 10, 0, CURRENT_DATE + INTERVAL '2 days');     -- Mì ý bị hỏng (quantity = 0)
+(1, 1, 9950, CURRENT_DATE + INTERVAL '180 days'),   -- Bột mì (10,000 - 50 xuất)
+(2, 2, 1985, CURRENT_DATE + INTERVAL '7 days'),     -- Thịt bò (2,000 - 15 xuất)
+(3, 3, 1480, CURRENT_DATE + INTERVAL '20 days'),    -- Phô mai (1,500 - 20 hỏng)
+(4, 4, 980, CURRENT_DATE + INTERVAL '2 days'),      -- Cà chua (1,000 - 20 hư)
+(5, 5, 49950, CURRENT_DATE + INTERVAL '335 days'),  -- Gạo (50,000 - 50)
+(8, 6, 4990, CURRENT_DATE + INTERVAL '1 day'),      -- Pizza (5,000 - 10 xuất)
+(9, 7, 2995, CURRENT_DATE + INTERVAL '1 day'),      -- Cơm hộp (3,000 - 5 xuất)
+(8, 8, 7980, CURRENT_DATE - INTERVAL '6 days'),     -- Pizza tuần trước (8,000 - 20)
+(4, 9, 0, CURRENT_DATE - INTERVAL '2 days'),        -- Cà chua hết hạn (quantity = 0)
+(10, 10, 0, CURRENT_DATE + INTERVAL '2 days');      -- Mì ý bị hỏng (quantity = 0)
 
 -- ============================================
 -- 14. RECEIPTS (10 phiếu xuất kho)
@@ -581,8 +581,13 @@ INSERT INTO reports (report_type, user_id, created_date) VALUES
 /*=========================================================================================================*/
 
 
-/*=========================================================================================================*/
---CODE FOR RESET DATABASE POSTGRESQL
+
+
+
+
+/*=====================================================================================================================================================*/
+/*====================================================CODE FOR RESET DATABASE POSTGRESQL===============================================================*/
+/*=====================================================================================================================================================*/
 -- 1. Xóa sổ toàn bộ Schema public (bao gồm mọi Table, View, Type,...)
 DROP SCHEMA public CASCADE;
 
@@ -592,4 +597,6 @@ CREATE SCHEMA public;
 -- 3. Cấp lại quyền truy cập cho user của bạn (User trong ảnh bạn gửi)
 GRANT ALL ON SCHEMA public TO public;
 GRANT ALL ON SCHEMA public TO kitchencontroldbv1_user;
-/*=========================================================================================================*/
+/*=====================================================================================================================================================*/
+/*=====================================================================================================================================================*/
+/*=====================================================================================================================================================*/
