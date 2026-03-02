@@ -380,10 +380,10 @@ INSERT INTO production_plans (plan_date, start_date, end_date, status, note) VAL
 -- Cases: Nhiều sản phẩm trong 1 plan, Số lượng khác nhau
 -- ============================================
 INSERT INTO production_plan_details (plan_id, product_id, quantity, note) VALUES 
-(1, 8, 50, 'Làm 50 pizza cho đơn hàng cửa hàng Q1'),
-(1, 9, 30, 'Làm 30 hộp cơm'),
-(1, 10, 40, 'Làm 40 phần mì ý'),
-(3, 8, 100, 'Sản xuất lớn tuần trước'),
+(1, 8, 5000, 'Làm 5000 pizza cho kho'),
+(1, 9, 3000, 'Làm 3000 hộp cơm'),
+(1, 10, 4000, 'Làm 4000 phần mì ý (Đã scale up)'),
+(3, 8, 8000, 'Sản xuất lớn tuần trước'),
 (3, 6, 200, 'Làm sẵn 200 đế bánh'),
 (4, 9, 80, 'Cơm hộp cho kế hoạch đang chạy'),
 (10, 8, 120, 'Pizza cho kế hoạch tuần này'),
@@ -428,17 +428,18 @@ INSERT INTO orders (delivery_id, store_id, order_date, status, img, comment) VAL
 -- Cases: Đơn có nhiều món, Đơn có 1 món, Số lượng khác nhau
 -- ============================================
 INSERT INTO order_details (order_id, product_id, quantity) VALUES 
-(1, 8, 20),      -- Đơn 1: 20 pizza
-(1, 9, 15),      -- Đơn 1: 15 hộp cơm
-(2, 8, 50),      -- Đơn 2: 50 pizza
-(2, 10, 30),     -- Đơn 2: 30 mì ý
-(3, 9, 40),      -- Đơn 3: 40 hộp cơm
-(4, 8, 25),      -- Đơn 4: 25 pizza
-(5, 10, 60),     -- Đơn 5: 60 mì ý
-(6, 8, 35),      -- Đơn 6 (damaged): 35 pizza
-(8, 9, 80),      -- Đơn 8: 80 hộp cơm
-(9, 8, 45);      -- Đơn 9: 45 pizza
-
+(1, 8, 20),      -- ID 1: Đơn 1 mua 20 Pizza
+(1, 9, 15),      -- ID 2: Đơn 1 mua 15 Cơm hộp
+(2, 8, 50),      -- ID 3: Đơn 2 mua 50 Pizza
+(2, 10, 30),     -- ID 4: Đơn 2 mua 30 Mì Ý
+(3, 9, 40),      -- ID 5: Đơn 3 mua 40 Cơm hộp
+(4, 8, 25),      -- ID 6: Đơn 4 mua 25 Pizza
+(5, 10, 60),     -- ID 7: Đơn 5 mua 60 Mì Ý
+(6, 8, 35),      -- ID 8: Đơn 6 (damaged) mua 35 Pizza
+(8, 9, 80),      -- ID 9: Đơn 8 mua 80 Cơm hộp
+(9, 8, 45),      -- ID 10: Đơn 9 mua 45 Pizza
+(7, 8, 10),      -- ID 11: Đơn 7 mua 10 Pizza (Bị khách hủy)
+(10, 9, 20);     -- ID 12: Đơn 10 mua 20 Cơm hộp (Chờ xử lý)
 -- ============================================
 -- 12. LOG_BATCHES (10 lô hàng)
 -- Cases: PURCHASE (nhập mua), PRODUCTION (sản xuất), Status khác nhau, Hết hạn, Sắp hết hạn
@@ -460,23 +461,25 @@ INSERT INTO log_batches (plan_id, product_id, quantity, production_date, expiry_
 (NULL, 4, 20, CURRENT_DATE - INTERVAL '10 days', CURRENT_DATE - INTERVAL '2 days', 'EXPIRED', 'PURCHASE', CURRENT_TIMESTAMP - INTERVAL '10 days'), -- Cà chua hết hạn
 
 -- DAMAGED batch
-(1, 10, 40, CURRENT_DATE, CURRENT_DATE + INTERVAL '2 days', 'DAMAGED', 'PRODUCTION', CURRENT_TIMESTAMP);  -- Mì ý bị hỏng
+(1, 10, 40, CURRENT_DATE, CURRENT_DATE + INTERVAL '2 days', 'DAMAGED', 'PRODUCTION', CURRENT_TIMESTAMP),  -- Mì ý bị hỏng
+(1, 10, 4000, CURRENT_DATE, CURRENT_DATE + INTERVAL '2 days', 'DONE', 'PRODUCTION', CURRENT_TIMESTAMP); -- Lô Mì Ý mới (Batch 11) để có hàng bán!
 
 -- ============================================
 -- 13. INVENTORIES (10 bản ghi tồn kho)
 -- Cases: Nguyên liệu, Thành phẩm, Số lượng khác nhau, Sắp hết hạn, Còn nhiều
 -- ============================================
 INSERT INTO inventories (product_id, batch_id, quantity, expiry_date) VALUES 
-(1, 1, 9950, CURRENT_DATE + INTERVAL '180 days'),   -- Bột mì (10,000 - 50 xuất)
-(2, 2, 1985, CURRENT_DATE + INTERVAL '7 days'),     -- Thịt bò (2,000 - 15 xuất)
-(3, 3, 1480, CURRENT_DATE + INTERVAL '20 days'),    -- Phô mai (1,500 - 20 hỏng)
-(4, 4, 980, CURRENT_DATE + INTERVAL '2 days'),      -- Cà chua (1,000 - 20 hư)
-(5, 5, 49950, CURRENT_DATE + INTERVAL '335 days'),  -- Gạo (50,000 - 50)
-(8, 6, 4990, CURRENT_DATE + INTERVAL '1 day'),      -- Pizza (5,000 - 10 xuất)
-(9, 7, 2995, CURRENT_DATE + INTERVAL '1 day'),      -- Cơm hộp (3,000 - 5 xuất)
-(8, 8, 7980, CURRENT_DATE - INTERVAL '6 days'),     -- Pizza tuần trước (8,000 - 20)
-(4, 9, 0, CURRENT_DATE - INTERVAL '2 days'),        -- Cà chua hết hạn (quantity = 0)
-(10, 10, 0, CURRENT_DATE + INTERVAL '2 days');      -- Mì ý bị hỏng (quantity = 0)
+(1, 1, 9950, CURRENT_DATE + INTERVAL '180 days'),   -- 10,000 - 50 xuất nội bộ
+(2, 2, 1985, CURRENT_DATE + INTERVAL '7 days'),     -- 2,000 - 15 xuất nội bộ
+(3, 3, 1480, CURRENT_DATE + INTERVAL '20 days'),    -- 1,500 - 20 hỏng
+(4, 4, 980, CURRENT_DATE + INTERVAL '2 days'),      -- 1,000 - 20 hỏng
+(5, 5, 50000, CURRENT_DATE + INTERVAL '335 days'),  -- Chưa xuất
+(8, 6, 4895, CURRENT_DATE + INTERVAL '1 day'),      -- 5000 - 20(Đơn1) - 50(Đơn2) - 35(Đơn6)
+(9, 7, 2945, CURRENT_DATE + INTERVAL '1 day'),      -- 3000 - 15(Đơn1) - 40(Đơn3)
+(8, 8, 7930, CURRENT_DATE - INTERVAL '6 days'),     -- 8000 - 25(Đơn4) - 45(Đơn9)
+(4, 9, 0, CURRENT_DATE - INTERVAL '2 days'),        -- Hết hạn
+(10, 10, 0, CURRENT_DATE + INTERVAL '2 days'),      -- Hỏng
+(10, 11, 3970, CURRENT_DATE + INTERVAL '2 days');   -- 4000 - 30(Đơn2)
 
 -- ============================================
 -- 14. RECEIPTS (10 phiếu xuất kho)
@@ -492,56 +495,47 @@ INSERT INTO receipts (receipt_code, order_id, export_date, status, note) VALUES
 ('PXK-007', 7, CURRENT_TIMESTAMP - INTERVAL '1 day', 'CANCELLED', 'Phiếu bị hủy do khách hủy đơn'),
 ('PXK-008', 8, CURRENT_TIMESTAMP + INTERVAL '1 day', 'DRAFT', 'Phiếu dự kiến ngày mai'),
 ('PXK-009', 9, CURRENT_TIMESTAMP - INTERVAL '7 days', 'COMPLETED', 'Phiếu tuần trước'),
-('PXK-010', NULL, CURRENT_TIMESTAMP, 'DRAFT', 'Phiếu xuất chuyển kho');
+('PXK-010', 4, CURRENT_TIMESTAMP, 'DRAFT', 'Phiếu xuất chuyển kho');
 
 -- ============================================
 -- 15. INVENTORY_TRANSACTIONS (10 giao dịch kho)
 -- Cases: IMPORT (nhập), EXPORT (xuất), Có receipt, Không có receipt
 -- ============================================
 INSERT INTO inventory_transactions (product_id, batch_id, type, quantity, created_at, note, receipt_id) VALUES 
--- IMPORT transactions
-(1, 1, 'IMPORT', 500, CURRENT_TIMESTAMP, 'Nhập kho bột mì từ nhà cung cấp', NULL),
-(2, 2, 'IMPORT', 100, CURRENT_TIMESTAMP, 'Nhập kho thịt bò tươi', NULL),
-(8, 6, 'IMPORT', 50, CURRENT_TIMESTAMP, 'Nhập kho pizza vừa sản xuất xong', NULL),
+-- IMPORT (Nhập hàng số lượng lớn)
+(1, 1, 'IMPORT', 10000, CURRENT_TIMESTAMP, 'Nhập kho bột mì', NULL),
+(2, 2, 'IMPORT', 2000, CURRENT_TIMESTAMP, 'Nhập kho thịt bò', NULL),
+(8, 6, 'IMPORT', 5000, CURRENT_TIMESTAMP, 'Nhập kho pizza sản xuất', NULL),
+(10, 11, 'IMPORT', 4000, CURRENT_TIMESTAMP, 'Nhập kho mì ý', NULL),
 
--- EXPORT transactions (có receipt_id)
-(1, 1, 'EXPORT', -50, CURRENT_TIMESTAMP, 'Xuất bột mì để sản xuất', 1),
-(2, 2, 'EXPORT', -15, CURRENT_TIMESTAMP, 'Xuất thịt bò cho sản xuất', 2),
-(8, 6, 'EXPORT', -10, CURRENT_TIMESTAMP, 'Xuất pizza cho đơn Q1', 1),
-(9, 7, 'EXPORT', -5, CURRENT_TIMESTAMP, 'Xuất cơm hộp cho đơn Q7', 2),
+-- EXPORT Bán hàng (Đã sửa lại xuất đúng Món ăn chứ không xuất Thịt/Bột mì nữa)
+(8, 6, 'EXPORT', -20, CURRENT_TIMESTAMP, 'Xuất Pizza cho đơn Q1', 1),        -- Đơn 1
+(9, 7, 'EXPORT', -15, CURRENT_TIMESTAMP, 'Xuất Cơm hộp cho đơn Q1', 1),      -- Đơn 1
+(8, 6, 'EXPORT', -50, CURRENT_TIMESTAMP, 'Xuất Pizza cho đơn Q7', 2),        -- Đơn 2
+(10, 11, 'EXPORT', -30, CURRENT_TIMESTAMP, 'Xuất Mì ý cho đơn Q7', 2),       -- Đơn 2
+(9, 7, 'EXPORT', -40, CURRENT_TIMESTAMP - INTERVAL '1 day', 'Xuất Cơm hộp', 3), -- Đơn 3
+(8, 6, 'EXPORT', -35, CURRENT_TIMESTAMP - INTERVAL '3 days', 'Hàng hư hỏng', 5),-- Đơn 6
+(8, 8, 'EXPORT', -45, CURRENT_TIMESTAMP - INTERVAL '7 days', 'Đơn tuần trước', 9),-- Đơn 9
+(8, 8, 'EXPORT', -25, CURRENT_TIMESTAMP, 'Xuất Pizza cho đơn 4', 10),        -- Đơn 4
 
--- EXPORT transactions (không có receipt - điều chỉnh kho)
-(3, 3, 'EXPORT', -20, CURRENT_TIMESTAMP, 'Phô mai bị hỏng do mất điện', NULL),
-(4, 4, 'EXPORT', -20, CURRENT_TIMESTAMP, 'Cà chua hư do quá hạn', NULL),
-(4, 9, 'EXPORT', -20, CURRENT_TIMESTAMP - INTERVAL '2 days', 'Cà chua hết hạn - loại bỏ', NULL);
-
+-- EXPORT Nội bộ & Hao hụt (Gắn vào phiếu xuất nội bộ PXK-006)
+(1, 1, 'EXPORT', -50, CURRENT_TIMESTAMP, 'Xuất bột mì cho sản xuất', 6),
+(2, 2, 'EXPORT', -15, CURRENT_TIMESTAMP, 'Xuất thịt bò cho sản xuất', 6),
+(3, 3, 'EXPORT', -20, CURRENT_TIMESTAMP, 'Phô mai bị hỏng', NULL),
+(4, 4, 'EXPORT', -20, CURRENT_TIMESTAMP, 'Cà chua hư', NULL);
 -- ============================================
 -- 16. ORDER_DETAIL_FILL (10 bản ghi phân bổ lô)
 -- Cases: 1 order_detail dùng nhiều batch, Batch khác nhau
 -- ============================================
 INSERT INTO order_detail_fill (order_detail_id, batch_id, quantity, created_at) VALUES 
--- Order detail 1 (20 pizza) dùng batch 6
-(1, 6, 20, CURRENT_TIMESTAMP),
-
--- Order detail 2 (15 cơm hộp) dùng batch 7
-(2, 7, 15, CURRENT_TIMESTAMP),
-
--- Order detail 3 (50 pizza) dùng 2 batches
-(3, 6, 20, CURRENT_TIMESTAMP),  -- Lấy 20 từ batch 6
-(3, 8, 30, CURRENT_TIMESTAMP),  -- Lấy 30 từ batch 8
-
--- Order detail 5 (40 cơm hộp) dùng batch 7
-(5, 7, 40, CURRENT_TIMESTAMP),
-
--- Order detail 6 (25 pizza) dùng batch 8
-(6, 8, 25, CURRENT_TIMESTAMP),
-
--- Order detail 8 (35 pizza - damaged) dùng batch 6
-(8, 6, 35, CURRENT_TIMESTAMP - INTERVAL '3 days'),
-
--- Order detail 10 (45 pizza) dùng batch 8
-(10, 8, 45, CURRENT_TIMESTAMP - INTERVAL '7 days');
-
+(1, 6, 20, CURRENT_TIMESTAMP),                  -- Detail 1 (Đơn 1, Pizza) -> Lấy 20 từ Batch 6
+(2, 7, 15, CURRENT_TIMESTAMP),                  -- Detail 2 (Đơn 1, Cơm) -> Lấy 15 từ Batch 7
+(3, 6, 50, CURRENT_TIMESTAMP),                  -- Detail 3 (Đơn 2, Pizza) -> Lấy 50 từ Batch 6
+(4, 11, 30, CURRENT_TIMESTAMP),                 -- Detail 4 (Đơn 2, Mì Ý) -> Lấy 30 từ Batch 11 (Lô mới)
+(5, 7, 40, CURRENT_TIMESTAMP - INTERVAL '1 day'),-- Detail 5 (Đơn 3, Cơm) -> Lấy 40 từ Batch 7
+(6, 8, 25, CURRENT_TIMESTAMP - INTERVAL '2 days'),-- Detail 6 (Đơn 4, Pizza) -> Lấy 25 từ Batch 8
+(8, 6, 35, CURRENT_TIMESTAMP - INTERVAL '3 days'),-- Detail 8 (Đơn 6, Pizza) -> Lấy 35 từ Batch 6
+(10, 8, 45, CURRENT_TIMESTAMP - INTERVAL '7 days');-- Detail 10 (Đơn 9, Pizza) -> Lấy 45 từ Batch 8
 -- ============================================
 -- 17. QUALITY_FEEDBACKS (10 phản hồi chất lượng)
 -- Cases: Rating khác nhau (1-5 sao), Có comment, Không comment, Đơn khác nhau
