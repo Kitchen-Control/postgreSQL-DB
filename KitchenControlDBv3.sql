@@ -7,7 +7,7 @@ CREATE TYPE "product_type_enum" AS ENUM (
 CREATE TYPE "orders_status" AS ENUM (
     'WAITTING',
     'PROCESSING',
-	'LOADED',
+	'DISPATCHED',
     'DELIVERING',
     'DONE',
     'DAMAGED',
