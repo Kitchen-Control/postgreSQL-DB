@@ -261,321 +261,319 @@ ALTER TABLE "production_plan_details" ADD FOREIGN KEY ("plan_id") REFERENCES "pr
 /*=========================================================================================================*/
 /*=========================================================================================================*/
 
--- ============================================
--- 1. ROLES
--- ============================================
-INSERT INTO roles (role_name) VALUES 
-('ADMIN'),                    -- 1: Quản trị hệ thống
-('MANAGER'),                  -- 2: Quản lý
-('STORE'),                    -- 3: Nhân viên cửa hàng
-('SUPPLY_COORDINATOR'),       -- 4: Điều phối cung ứng
-('WAREHOUSE_KEEPER'),         -- 5: Thủ kho
-('SHIPPER'),                  -- 6: Nhân viên giao hàng
-('KITCHEN_STAFF');            -- 7: Nhân viên bếp
+BEGIN;
 
--- ============================================
--- 2. STORES (10 cửa hàng ở các khu vực khác nhau)
--- ============================================
-INSERT INTO stores (store_name, address, phone) VALUES 
-('Chi nhánh Quận 1', '123 Nguyễn Huệ, Quận 1, TP.HCM', '0281234567'),
-('Chi nhánh Quận 7', '456 Nguyễn Thị Thập, Quận 7, TP.HCM', '0287654321'),
-('Chi nhánh Thủ Đức', '789 Võ Văn Ngân, Thủ Đức, TP.HCM', '0289876543'),
-('Chi nhánh Bình Thạnh', '321 Điện Biên Phủ, Bình Thạnh, TP.HCM', '0285551234'),
-('Chi nhánh Hà Nội', '555 Trần Phú, Hoàn Kiếm, Hà Nội', '0245556789'),
-('Chi nhánh Đà Nẵng', '777 Lê Duẩn, Hải Châu, Đà Nẵng', '0236667890'),
-('Chi nhánh Cần Thơ', '888 Nguyễn Văn Linh, Ninh Kiều, Cần Thơ', '0292223456'),
-('Chi nhánh Nha Trang', '999 Trần Phú, Nha Trang, Khánh Hòa', '0258889012'),
-('Chi nhánh Vũng Tàu', '111 Thùy Vân, Vũng Tàu, BR-VT', '0254445678'),
-('Chi nhánh Đồng Nai', '222 Phạm Văn Thuận, Biên Hòa, Đồng Nai', '0251112345');
+-- =============================
+-- ROLES
+-- =============================
+INSERT INTO roles(role_name) VALUES
+('ADMIN'),
+('MANAGER'),
+('STORE'),
+('SUPPLY_COORDINATOR'),
+('WAREHOUSE_KEEPER'),
+('SHIPPER');
 
--- ============================================
--- 3. USERS (10 users với các vai trò khác nhau)
--- Cases: Admin, Manager, Store staff (nhiều stores), Coordinator, Warehouse, Shipper
--- ============================================
-INSERT INTO users (username, password, full_name, role_id, store_id) VALUES 
-('admin001', '123456', 'Nguyễn Quản Trị', 1, NULL),          -- Admin
-('manager001', '123456', 'Trần Giám Đốc', 2, NULL),          -- Manager
-('store_q1', '123456', 'Lê Nhân Viên Q1', 3, 1),             -- Store Q1 (unique)
-('store_q7', '123456', 'Phạm Thị Lan', 3, 2),                -- Store Q7 (unique)
-('coordinator01', '123456', 'Võ Điều Phối', 4, NULL),        -- Coordinator
-('warehouse01', '123456', 'Đặng Thủ Kho', 5, NULL),          -- Warehouse Keeper
-('shipper01', '123456', 'Hoàng Tài Xế 1', 6, NULL),          -- Shipper 1
-('shipper02', '123456', 'Bùi Tài Xế 2', 6, NULL),            -- Shipper 2
-('kitchen01', '123456', 'Ngô Đầu Bếp', 7, NULL);             -- Kitchen Staff
+-- =============================
+-- STORES
+-- =============================
+INSERT INTO stores(store_name,address,phone)
+SELECT
+'Store ' || i,
+'Address ' || i,
+'090000' || LPAD(i::text,3,'0')
+FROM generate_series(1,15) i;
 
--- ============================================
--- 4. PRODUCTS (10 sản phẩm: Raw, Semi, Finished)
--- Cases: Nguyên liệu thô, Bán thành phẩm, Thành phẩm, Hạn sử dụng khác nhau
--- ============================================
-INSERT INTO products (product_name, product_type, unit, shelf_life_days) VALUES 
--- RAW MATERIALS (Nguyên liệu thô)
-('Bột Mì Loại 1', 'RAW_MATERIAL', 'kg', 180),                    -- 1: Lâu hạn
-('Thịt Bò Úc', 'RAW_MATERIAL', 'kg', 7),                         -- 2: Ngắn hạn
-('Phô Mai Mozzarella', 'RAW_MATERIAL', 'kg', 30),                -- 3: Trung hạn
-('Cà Chua Tươi', 'RAW_MATERIAL', 'kg', 5),                       -- 4: Rất ngắn hạn
-('Gạo ST25', 'RAW_MATERIAL', 'kg', 365),                         -- 5: Rất lâu hạn
+-- =============================
+-- USERS
+-- =============================
 
--- SEMI-FINISHED (Bán thành phẩm)
-('Đế Bánh Pizza 30cm', 'SEMI_FINISHED', 'cái', 3),               -- 6: Cần bảo quản lạnh
-('Sốt Cà Chua Ý', 'SEMI_FINISHED', 'lít', 7),                    -- 7: Đã chế biến sơ
+-- Admin
+INSERT INTO users(username,password,full_name,role_id)
+VALUES ('admin','123','System Admin',1);
 
--- FINISHED PRODUCTS (Thành phẩm)
-('Pizza Bò Phô Mai Size L', 'FINISHED_PRODUCT', 'cái', 1),       -- 8: Ăn ngay
-('Cơm Hộp Sườn Nướng', 'FINISHED_PRODUCT', 'hộp', 1),           -- 9: Ăn ngay
-('Mì Ý Sốt Bò Bằm', 'FINISHED_PRODUCT', 'phần', 2);             -- 10: Hơi lâu hơn
+-- Managers
+INSERT INTO users(username,password,full_name,role_id)
+SELECT
+'manager'||i,
+'123',
+'Manager '||i,
+2
+FROM generate_series(1,5) i;
 
--- ============================================
--- 5. RECIPES (10 công thức cho các sản phẩm)
--- Cases: Công thức đơn giản, phức tạp, nhiều bước, ít nguyên liệu
--- ============================================
-INSERT INTO recipes (product_id, recipe_name, yield_quantity, description) VALUES 
-(6, 'Công thức Đế Bánh Pizza Cơ Bản', 10, 'Làm ra 10 cái đế bánh 30cm'),
-(7, 'Công thức Sốt Cà Chua Ý', 5, 'Làm ra 5 lít sốt cà chua'),
-(8, 'Công thức Pizza Bò Phô Mai', 1, 'Làm ra 1 cái pizza hoàn chỉnh'),
-(9, 'Công thức Cơm Hộp Sườn', 20, 'Làm ra 20 hộp cơm'),
-(10, 'Công thức Mì Ý Sốt Bò', 15, 'Làm ra 15 phần mì ý'),
-(6, 'Công thức Đế Bánh Pizza Nâng Cao', 20, 'Phiên bản cải tiến - 20 đế'),
-(8, 'Công thức Pizza Đặc Biệt', 1, 'Pizza với nhiều topping hơn'),
-(9, 'Công thức Cơm Hộp Cao Cấp', 10, 'Cơm hộp với nhiều món'),
-(10, 'Công thức Mì Ý Carbonara', 10, 'Mì ý kiểu Ý'),
-(7, 'Công thức Sốt Cà Chua Đặc Biệt', 3, 'Sốt đặc biệt với thảo mộc');
+-- Store users
+INSERT INTO users(username,password,full_name,role_id,store_id)
+SELECT
+'store_user'||i,
+'123',
+'Store User '||i,
+3,
+(i % 15)+1
+FROM generate_series(1,30) i;
 
--- ============================================
--- 6. RECIPE_DETAILS (10 chi tiết công thức)
--- Cases: 1 công thức nhiều nguyên liệu, tỷ lệ khác nhau
--- ============================================
-INSERT INTO recipe_details (recipe_id, raw_material_id, quantity) VALUES 
--- Recipe 1 (Đế bánh cơ bản): Bột + Nước
-(1, 1, 5.0),          -- 5kg bột mì cho 10 đế
-(1, 5, 2.0),          -- 2kg gạo (làm bột gạo)
+-- Supply coordinators
+INSERT INTO users(username,password,full_name,role_id)
+SELECT
+'supply'||i,
+'123',
+'Supply Coordinator '||i,
+4
+FROM generate_series(1,5) i;
 
--- Recipe 2 (Sốt cà chua): Cà chua
-(2, 4, 10.0),         -- 10kg cà chua cho 5 lít sốt
+-- Warehouse keepers
+INSERT INTO users(username,password,full_name,role_id)
+SELECT
+'warehouse'||i,
+'123',
+'Warehouse Keeper '||i,
+5
+FROM generate_series(1,10) i;
 
--- Recipe 3 (Pizza): Đế + Thịt + Phô mai + Sốt
-(3, 6, 1.0),          -- 1 đế bánh
-(3, 2, 0.2),          -- 0.2kg thịt bò
-(3, 3, 0.15),         -- 0.15kg phô mai
-(3, 7, 0.1),          -- 0.1 lít sốt
+-- Shippers
+INSERT INTO users(username,password,full_name,role_id)
+SELECT
+'shipper'||i,
+'123',
+'Shipper '||i,
+6
+FROM generate_series(1,10) i;
 
--- Recipe 4 (Cơm hộp): Gạo + Thịt
-(4, 5, 5.0),          -- 5kg gạo cho 20 hộp
-(4, 2, 2.0);          -- 2kg thịt cho 20 hộp
+-- =============================
+-- PRODUCTS
+-- =============================
 
--- ============================================
--- 7. PRODUCTION_PLANS (10 kế hoạch sản xuất)
--- Cases: Draft, Approved, In Progress, Completed, Cancelled, Khác ngày, Khác thời gian
--- ============================================
-INSERT INTO production_plans (plan_date, start_date, end_date, status, note) VALUES 
-(CURRENT_DATE, CURRENT_DATE, CURRENT_DATE + INTERVAL '1 day', 'APPROVED', 'Kế hoạch sản xuất hôm nay'),
-(CURRENT_DATE, CURRENT_DATE + INTERVAL '1 day', CURRENT_DATE + INTERVAL '2 days', 'DRAFT', 'Kế hoạch ngày mai (đang soạn)'),
-(CURRENT_DATE - INTERVAL '7 days', CURRENT_DATE - INTERVAL '7 days', CURRENT_DATE - INTERVAL '6 days', 'COMPLETED', 'Kế hoạch tuần trước (đã xong)'),
-(CURRENT_DATE - INTERVAL '1 day', CURRENT_DATE - INTERVAL '1 day', CURRENT_DATE, 'IN_PROGRESS', 'Kế hoạch đang thực hiện'),
-(CURRENT_DATE + INTERVAL '3 days', CURRENT_DATE + INTERVAL '3 days', CURRENT_DATE + INTERVAL '5 days', 'DRAFT', 'Kế hoạch cuối tuần'),
-(CURRENT_DATE - INTERVAL '14 days', CURRENT_DATE - INTERVAL '14 days', CURRENT_DATE - INTERVAL '13 days', 'COMPLETED', 'Kế hoạch 2 tuần trước'),
-(CURRENT_DATE, CURRENT_DATE, CURRENT_DATE, 'CANCELLED', 'Kế hoạch bị hủy do thiếu nguyên liệu'),
-(CURRENT_DATE + INTERVAL '7 days', CURRENT_DATE + INTERVAL '7 days', CURRENT_DATE + INTERVAL '9 days', 'DRAFT', 'Kế hoạch tuần sau'),
-(CURRENT_DATE - INTERVAL '3 days', CURRENT_DATE - INTERVAL '3 days', CURRENT_DATE - INTERVAL '2 days', 'COMPLETED', 'Kế hoạch giữa tuần'),
-(CURRENT_DATE, CURRENT_DATE, CURRENT_DATE + INTERVAL '3 days', 'APPROVED', 'Kế hoạch cả tuần');
+-- RAW MATERIAL
+INSERT INTO products(product_name,product_type,unit,shelf_life_days)
+SELECT
+'Raw Material '||i,
+'RAW_MATERIAL',
+'kg',
+180
+FROM generate_series(1,10) i;
 
--- ============================================
--- 8. PRODUCTION_PLAN_DETAILS (10 chi tiết kế hoạch)
--- Cases: Nhiều sản phẩm trong 1 plan, Số lượng khác nhau
--- ============================================
-INSERT INTO production_plan_details (plan_id, product_id, quantity, note) VALUES 
-(1, 8, 50, 'Làm 50 pizza cho đơn hàng cửa hàng Q1'),
-(1, 9, 30, 'Làm 30 hộp cơm'),
-(1, 10, 40, 'Làm 40 phần mì ý'),
-(3, 8, 100, 'Sản xuất lớn tuần trước'),
-(3, 6, 200, 'Làm sẵn 200 đế bánh'),
-(4, 9, 80, 'Cơm hộp cho kế hoạch đang chạy'),
-(10, 8, 120, 'Pizza cho kế hoạch tuần này'),
-(10, 10, 60, 'Mì ý cho tuần này'),
-(6, 8, 75, 'Sản xuất 2 tuần trước'),
-(9, 9, 45, 'Cơm hộp giữa tuần');
+-- SEMI FINISHED
+INSERT INTO products(product_name,product_type,unit,shelf_life_days)
+SELECT
+'Semi Product '||i,
+'SEMI_FINISHED',
+'kg',
+10
+FROM generate_series(1,5) i;
 
--- ============================================
--- 9. DELIVERIES (10 chuyến giao hàng)
--- Cases: Đã giao, Đang giao, Sắp giao, Shipper khác nhau
--- ============================================
-INSERT INTO deliveries (delivery_date, shipper_id, created_at) VALUES 
-(CURRENT_DATE, 7, CURRENT_TIMESTAMP),                                           -- Hôm nay - Shipper 1
-(CURRENT_DATE, 8, CURRENT_TIMESTAMP),                                           -- Hôm nay - Shipper 2
-(CURRENT_DATE - INTERVAL '1 day', 7, CURRENT_TIMESTAMP - INTERVAL '1 day'),     -- Hôm qua
-(CURRENT_DATE - INTERVAL '2 days', 8, CURRENT_TIMESTAMP - INTERVAL '2 days'),   -- 2 ngày trước
-(CURRENT_DATE + INTERVAL '1 day', 7, CURRENT_TIMESTAMP),                        -- Ngày mai
-(CURRENT_DATE - INTERVAL '7 days', 7, CURRENT_TIMESTAMP - INTERVAL '7 days'),   -- Tuần trước
-(CURRENT_DATE, NULL, CURRENT_TIMESTAMP),                                        -- Chưa assign shipper
-(CURRENT_DATE + INTERVAL '2 days', 8, CURRENT_TIMESTAMP),                       -- 2 ngày nữa
-(CURRENT_DATE - INTERVAL '3 days', 7, CURRENT_TIMESTAMP - INTERVAL '3 days'),   -- 3 ngày trước
-(CURRENT_DATE, 8, CURRENT_TIMESTAMP);                                           -- Hôm nay - Shipper 2
+-- FINISHED PRODUCTS
+INSERT INTO products(product_name,product_type,unit,shelf_life_days)
+SELECT
+'Cake Product '||i,
+'FINISHED_PRODUCT',
+'piece',
+3
+FROM generate_series(1,10) i;
 
--- ============================================
--- 10. ORDERS (10 đơn hàng)
--- Cases: WAITTING, PROCESSING, DELIVERING, DONE, DAMAGED, CANCLED, Có/không delivery, Có/không img
--- ============================================
-INSERT INTO orders (delivery_id, store_id, order_date, status, img, comment) VALUES 
-(NULL, 1, CURRENT_TIMESTAMP, 'WAITTING', NULL, 'Đơn mới từ Q1, giao trước 10h sáng'),
-(1, 2, CURRENT_TIMESTAMP, 'DELIVERING', NULL, 'Đang trên đường giao đến Q7'),
-(2, 3, CURRENT_TIMESTAMP - INTERVAL '1 day', 'DONE', NULL, 'Đã giao thành công đến Thủ Đức'),
-(3, 4, CURRENT_TIMESTAMP - INTERVAL '2 days', 'DONE', NULL, 'Hoàn thành giao hàng Bình Thạnh'),
-(NULL, 5, CURRENT_TIMESTAMP, 'PROCESSING', NULL, 'Đang chuẩn bị hàng cho Hà Nội'),
-(4, 1, CURRENT_TIMESTAMP - INTERVAL '3 days', 'DAMAGED', 'damaged_img1.jpg', 'Hàng bị hư hỏng khi vận chuyển - 5 pizza bị dập'),
-(NULL, 6, CURRENT_TIMESTAMP - INTERVAL '1 day', 'CANCLED', NULL, 'Khách hàng hủy đơn do đặt nhầm'),
-(5, 7, CURRENT_TIMESTAMP + INTERVAL '1 day', 'PROCESSING', NULL, 'Đơn hàng dự kiến giao ngày mai'),
-(6, 8, CURRENT_TIMESTAMP - INTERVAL '7 days', 'DONE', NULL, 'Đơn hàng tuần trước đã hoàn thành'),
-(7, 9, CURRENT_TIMESTAMP, 'WAITTING', NULL, 'Đơn hàng từ Vũng Tàu chờ xử lý');
+-- =============================
+-- RECIPES
+-- =============================
 
--- ============================================
--- 11. ORDER_DETAILS (10 chi tiết đơn hàng)
--- Cases: Đơn có nhiều món, Đơn có 1 món, Số lượng khác nhau
--- ============================================
-INSERT INTO order_details (order_id, product_id, quantity) VALUES 
-(1, 8, 20),      -- Đơn 1: 20 pizza
-(1, 9, 15),      -- Đơn 1: 15 hộp cơm
-(2, 8, 50),      -- Đơn 2: 50 pizza
-(2, 10, 30),     -- Đơn 2: 30 mì ý
-(3, 9, 40),      -- Đơn 3: 40 hộp cơm
-(4, 8, 25),      -- Đơn 4: 25 pizza
-(5, 10, 60),     -- Đơn 5: 60 mì ý
-(6, 8, 35),      -- Đơn 6 (damaged): 35 pizza
-(8, 9, 80),      -- Đơn 8: 80 hộp cơm
-(9, 8, 45);      -- Đơn 9: 45 pizza
+INSERT INTO recipes(product_id,recipe_name,yield_quantity,description)
+SELECT
+i,
+'Recipe '||i,
+10,
+'Recipe description'
+FROM generate_series(16,25) i;
 
--- ============================================
--- 12. LOG_BATCHES (10 lô hàng)
--- Cases: PURCHASE (nhập mua), PRODUCTION (sản xuất), Status khác nhau, Hết hạn, Sắp hết hạn
--- ============================================
-INSERT INTO log_batches (plan_id, product_id, quantity, production_date, expiry_date, status, type, created_at) VALUES 
--- PURCHASE batches (Nhập mua nguyên liệu)
-(NULL, 1, 500, CURRENT_DATE, CURRENT_DATE + INTERVAL '180 days', 'DONE', 'PURCHASE', CURRENT_TIMESTAMP),  -- Bột mì
-(NULL, 2, 100, CURRENT_DATE, CURRENT_DATE + INTERVAL '7 days', 'DONE', 'PURCHASE', CURRENT_TIMESTAMP),    -- Thịt bò
-(NULL, 3, 80, CURRENT_DATE - INTERVAL '10 days', CURRENT_DATE + INTERVAL '20 days', 'DONE', 'PURCHASE', CURRENT_TIMESTAMP - INTERVAL '10 days'), -- Phô mai
-(NULL, 4, 50, CURRENT_DATE - INTERVAL '3 days', CURRENT_DATE + INTERVAL '2 days', 'DONE', 'PURCHASE', CURRENT_TIMESTAMP - INTERVAL '3 days'),  -- Cà chua sắp hết hạn
-(NULL, 5, 1000, CURRENT_DATE - INTERVAL '30 days', CURRENT_DATE + INTERVAL '335 days', 'DONE', 'PURCHASE', CURRENT_TIMESTAMP - INTERVAL '30 days'), -- Gạo
+-- =============================
+-- RECIPE DETAILS
+-- =============================
 
--- PRODUCTION batches (Sản xuất)
-(1, 8, 50, CURRENT_DATE, CURRENT_DATE + INTERVAL '1 day', 'DONE', 'PRODUCTION', CURRENT_TIMESTAMP),       -- Pizza từ plan 1
-(1, 9, 30, CURRENT_DATE, CURRENT_DATE + INTERVAL '1 day', 'PROCESSING', 'PRODUCTION', CURRENT_TIMESTAMP), -- Cơm hộp đang làm
-(3, 8, 100, CURRENT_DATE - INTERVAL '7 days', CURRENT_DATE - INTERVAL '6 days', 'DONE', 'PRODUCTION', CURRENT_TIMESTAMP - INTERVAL '7 days'), -- Pizza tuần trước
+INSERT INTO recipe_details(recipe_id,raw_material_id,quantity)
+SELECT
+r.recipe_id,
+((random()*9)+1)::int,
+(random()*5)+1
+FROM recipes r
+CROSS JOIN generate_series(1,5);
 
--- EXPIRED batch
-(NULL, 4, 20, CURRENT_DATE - INTERVAL '10 days', CURRENT_DATE - INTERVAL '2 days', 'EXPIRED', 'PURCHASE', CURRENT_TIMESTAMP - INTERVAL '10 days'), -- Cà chua hết hạn
+-- =============================
+-- PRODUCTION PLANS
+-- =============================
 
--- DAMAGED batch
-(1, 10, 40, CURRENT_DATE, CURRENT_DATE + INTERVAL '2 days', 'DAMAGED', 'PRODUCTION', CURRENT_TIMESTAMP);  -- Mì ý bị hỏng
+INSERT INTO production_plans(plan_date,start_date,end_date,status,note)
+SELECT
+CURRENT_DATE - (i*2),
+CURRENT_DATE - (i*2),
+CURRENT_DATE - (i*2) + 1,
+CASE
+WHEN i%3=0 THEN 'DONE'
+WHEN i%3=1 THEN 'PROCESSING'
+ELSE 'PLANNED'
+END,
+'Production plan '||i
+FROM generate_series(1,20) i;
 
--- ============================================
--- 13. INVENTORIES (10 bản ghi tồn kho)
--- Cases: Nguyên liệu, Thành phẩm, Số lượng khác nhau, Sắp hết hạn, Còn nhiều
--- ============================================
-INSERT INTO inventories (product_id, batch_id, quantity, expiry_date) VALUES 
-(1, 1, 450, CURRENT_DATE + INTERVAL '180 days'),   -- Bột mì còn nhiều
-(2, 2, 85, CURRENT_DATE + INTERVAL '7 days'),      -- Thịt bò
-(3, 3, 60, CURRENT_DATE + INTERVAL '20 days'),     -- Phô mai
-(4, 4, 30, CURRENT_DATE + INTERVAL '2 days'),      -- Cà chua sắp hết hạn
-(5, 5, 950, CURRENT_DATE + INTERVAL '335 days'),   -- Gạo còn rất nhiều
-(8, 6, 40, CURRENT_DATE + INTERVAL '1 day'),       -- Pizza còn 40 (đã bán 10)
-(9, 7, 25, CURRENT_DATE + INTERVAL '1 day'),       -- Cơm hộp đang làm dở
-(8, 8, 80, CURRENT_DATE - INTERVAL '6 days'),      -- Pizza tuần trước còn 80
-(4, 9, 0, CURRENT_DATE - INTERVAL '2 days'),       -- Cà chua hết hạn (quantity = 0)
-(10, 10, 0, CURRENT_DATE + INTERVAL '2 days');     -- Mì ý bị hỏng (quantity = 0)
+-- =============================
+-- PLAN DETAILS
+-- =============================
 
--- ============================================
--- 14. RECEIPTS (10 phiếu xuất kho)
--- Cases: DRAFT, COMPLETED, CANCELLED, Có order_id, Không có order_id
--- ============================================
-INSERT INTO receipts (receipt_code, order_id, export_date, status, note) VALUES 
-('PXK-001', 1, CURRENT_TIMESTAMP, 'COMPLETED', 'Phiếu xuất cho đơn Q1'),
-('PXK-002', 2, CURRENT_TIMESTAMP, 'COMPLETED', 'Phiếu xuất cho đơn Q7'),
-('PXK-003', 3, CURRENT_TIMESTAMP - INTERVAL '1 day', 'COMPLETED', 'Phiếu đã hoàn thành'),
-('PXK-004', 5, CURRENT_TIMESTAMP, 'DRAFT', 'Phiếu đang soạn cho Hà Nội'),
-('PXK-005', 6, CURRENT_TIMESTAMP - INTERVAL '3 days', 'COMPLETED', 'Phiếu có hàng bị hư'),
-('PXK-006', NULL, CURRENT_TIMESTAMP, 'DRAFT', 'Phiếu xuất nội bộ'),
-('PXK-007', 7, CURRENT_TIMESTAMP - INTERVAL '1 day', 'CANCELLED', 'Phiếu bị hủy do khách hủy đơn'),
-('PXK-008', 8, CURRENT_TIMESTAMP + INTERVAL '1 day', 'DRAFT', 'Phiếu dự kiến ngày mai'),
-('PXK-009', 9, CURRENT_TIMESTAMP - INTERVAL '7 days', 'COMPLETED', 'Phiếu tuần trước'),
-('PXK-010', NULL, CURRENT_TIMESTAMP, 'DRAFT', 'Phiếu xuất chuyển kho');
+INSERT INTO production_plan_details(plan_id,product_id,quantity,note)
+SELECT
+p.plan_id,
+((random()*9)+16)::int,
+(random()*200)+50,
+'Production item'
+FROM production_plans p
+CROSS JOIN generate_series(1,3);
 
--- ============================================
--- 15. INVENTORY_TRANSACTIONS (10 giao dịch kho)
--- Cases: IMPORT (nhập), EXPORT (xuất), Có receipt, Không có receipt
--- ============================================
-INSERT INTO inventory_transactions (product_id, batch_id, type, quantity, created_at, note, receipt_id) VALUES 
--- IMPORT transactions
-(1, 1, 'IMPORT', 500, CURRENT_TIMESTAMP, 'Nhập kho bột mì từ nhà cung cấp', NULL),
-(2, 2, 'IMPORT', 100, CURRENT_TIMESTAMP, 'Nhập kho thịt bò tươi', NULL),
-(8, 6, 'IMPORT', 50, CURRENT_TIMESTAMP, 'Nhập kho pizza vừa sản xuất xong', NULL),
+-- =============================
+-- LOG BATCHES
+-- =============================
 
--- EXPORT transactions (có receipt_id)
-(1, 1, 'EXPORT', -50, CURRENT_TIMESTAMP, 'Xuất bột mì để sản xuất', 1),
-(2, 2, 'EXPORT', -15, CURRENT_TIMESTAMP, 'Xuất thịt bò cho sản xuất', 2),
-(8, 6, 'EXPORT', -10, CURRENT_TIMESTAMP, 'Xuất pizza cho đơn Q1', 1),
-(9, 7, 'EXPORT', -5, CURRENT_TIMESTAMP, 'Xuất cơm hộp cho đơn Q7', 2),
+INSERT INTO log_batches(
+plan_id,
+product_id,
+quantity,
+production_date,
+expiry_date,
+status,
+type,
+created_at
+)
+SELECT
+((random()*19)+1)::int,
+((random()*9)+16)::int,
+(random()*100)+10,
+CURRENT_DATE - ((random()*10)::int),
+CURRENT_DATE + ((random()*5)::int),
+(ARRAY[
+'PROCESSING',
+'WAITING_TO_CONFIRM',
+'DONE',
+'WAITING_TO_CANCLE',
+'EXPIRED',
+'DAMAGED'
+])[floor(random()*6)+1]::log_batches_enum,
+(ARRAY['PRODUCTION','PURCHASE'])[floor(random()*2)+1]::log_batches_type,
+now()
+FROM generate_series(1,200);
 
--- EXPORT transactions (không có receipt - điều chỉnh kho)
-(3, 3, 'EXPORT', -20, CURRENT_TIMESTAMP, 'Phô mai bị hỏng do mất điện', NULL),
-(4, 4, 'EXPORT', -20, CURRENT_TIMESTAMP, 'Cà chua hư do quá hạn', NULL),
-(4, 9, 'EXPORT', -20, CURRENT_TIMESTAMP - INTERVAL '2 days', 'Cà chua hết hạn - loại bỏ', NULL);
+-- =============================
+-- INVENTORIES
+-- =============================
 
--- ============================================
--- 16. ORDER_DETAIL_FILL (10 bản ghi phân bổ lô)
--- Cases: 1 order_detail dùng nhiều batch, Batch khác nhau
--- ============================================
-INSERT INTO order_detail_fill (order_detail_id, batch_id, quantity, created_at) VALUES 
--- Order detail 1 (20 pizza) dùng batch 6
-(1, 6, 20, CURRENT_TIMESTAMP),
+INSERT INTO inventories(product_id,batch_id,quantity,expiry_date)
+SELECT
+product_id,
+batch_id,
+quantity,
+expiry_date
+FROM log_batches;
 
--- Order detail 2 (15 cơm hộp) dùng batch 7
-(2, 7, 15, CURRENT_TIMESTAMP),
+-- =============================
+-- DELIVERIES
+-- =============================
 
--- Order detail 3 (50 pizza) dùng 2 batches
-(3, 6, 20, CURRENT_TIMESTAMP),  -- Lấy 20 từ batch 6
-(3, 8, 30, CURRENT_TIMESTAMP),  -- Lấy 30 từ batch 8
+INSERT INTO deliveries(delivery_date,shipper_id,created_at)
+SELECT
+CURRENT_DATE - (random()*10)::int,
+((random()*9)+50)::int,
+now()
+FROM generate_series(1,100);
 
--- Order detail 5 (40 cơm hộp) dùng batch 7
-(5, 7, 40, CURRENT_TIMESTAMP),
+-- =============================
+-- ORDERS
+-- =============================
 
--- Order detail 6 (25 pizza) dùng batch 8
-(6, 8, 25, CURRENT_TIMESTAMP),
+INSERT INTO orders(delivery_id,store_id,order_date,status,img,comment)
+SELECT
+((random()*99)+1)::int,
+((random()*14)+1)::int,
+now() - (random()*10)*interval '1 day',
+(ARRAY[
+'WAITTING',
+'PROCESSING',
+'DISPATCHED',
+'DELIVERING',
+'DONE',
+'DAMAGED',
+'CANCLED'
+])[floor(random()*7)+1]::orders_status,
+NULL,
+'Customer order'
+FROM generate_series(1,200);
 
--- Order detail 8 (35 pizza - damaged) dùng batch 6
-(8, 6, 35, CURRENT_TIMESTAMP - INTERVAL '3 days'),
+-- =============================
+-- ORDER DETAILS
+-- =============================
 
--- Order detail 10 (45 pizza) dùng batch 8
-(10, 8, 45, CURRENT_TIMESTAMP - INTERVAL '7 days');
+INSERT INTO order_details(order_id,product_id,quantity)
+SELECT
+o.order_id,
+((random()*9)+16)::int,
+(random()*10)+1
+FROM orders o
+CROSS JOIN generate_series(1,3);
 
--- ============================================
--- 17. QUALITY_FEEDBACKS (10 phản hồi chất lượng)
--- Cases: Rating khác nhau (1-5 sao), Có comment, Không comment, Đơn khác nhau
--- ============================================
-INSERT INTO quality_feedbacks (order_id, rating, comment, created_at) VALUES 
-(3, 5, 'Sản phẩm rất tốt! Pizza nóng giòn, đúng yêu cầu', CURRENT_TIMESTAMP - INTERVAL '1 day'),
-(4, 4, 'Tốt nhưng giao hơi trễ 15 phút', CURRENT_TIMESTAMP - INTERVAL '2 days'),
-(6, 1, 'Rất tệ! 5/35 pizza bị dập nát, không thể bán được', CURRENT_TIMESTAMP - INTERVAL '3 days'),
-(9, 5, 'Hoàn hảo! Đóng gói cẩn thận, giao đúng giờ', CURRENT_TIMESTAMP - INTERVAL '7 days'),
-(2, 3, 'Bình thường, một số pizza hơi nguội', CURRENT_TIMESTAMP),
-(8, 4, 'Tốt, sẽ đặt lại lần sau', CURRENT_TIMESTAMP + INTERVAL '1 day'),
-(1, 5, 'Tuyệt vời! Chất lượng ổn định', CURRENT_TIMESTAMP),
-(5, 2, 'Không hài lòng, mì ý bị khô', CURRENT_TIMESTAMP),
-(10, 4, 'Khá tốt, hương vị ngon', CURRENT_TIMESTAMP),
-(NULL, 5, 'Feedback chung - Dịch vụ tốt', CURRENT_TIMESTAMP);  -- Feedback không gắn order cụ thể
+-- =============================
+-- RECEIPTS
+-- =============================
 
--- ============================================
--- 18. REPORTS (10 báo cáo)
--- Cases: Report types khác nhau, Users khác nhau tạo báo cáo
--- ============================================
-INSERT INTO reports (report_type, user_id, created_date) VALUES 
-('WASTE', 6, CURRENT_TIMESTAMP),                                    -- Báo cáo hao hụt - Warehouse keeper
-('REVENUE', 1, CURRENT_TIMESTAMP),                                  -- Báo cáo doanh thu - Admin
-('INVENTORY', 6, CURRENT_TIMESTAMP - INTERVAL '1 day'),             -- Báo cáo tồn kho
-('PRODUCTION', 2, CURRENT_TIMESTAMP - INTERVAL '2 days'),           -- Báo cáo sản xuất - Manager
-('DELIVERY', 5, CURRENT_TIMESTAMP),                                 -- Báo cáo giao hàng - Coordinator
-('QUALITY', 2, CURRENT_TIMESTAMP - INTERVAL '3 days'),              -- Báo cáo chất lượng - QC Inspector
-('EXPENSE', 2, CURRENT_TIMESTAMP - INTERVAL '7 days'),              -- Báo cáo chi phí - Manager
-('SALES', 1, CURRENT_TIMESTAMP - INTERVAL '14 days'),               -- Báo cáo bán hàng - Admin
-('SUPPLIER', 6, CURRENT_TIMESTAMP),                                 -- Báo cáo nhà cung cấp - Warehouse
-('PERFORMANCE', 2, CURRENT_TIMESTAMP - INTERVAL '30 days');         -- Báo cáo hiệu suất - Manager
+INSERT INTO receipts(receipt_code,order_id,status,note)
+SELECT
+'PXK-'||LPAD(order_id::text,4,'0'),
+order_id,
+(ARRAY['DRAFT','COMPLETED','CANCELLED'])[floor(random()*3)+1]::receipt_status,
+'Warehouse export'
+FROM orders;
+
+-- =============================
+-- INVENTORY TRANSACTIONS
+-- =============================
+
+INSERT INTO inventory_transactions(
+product_id,
+batch_id,
+type,
+quantity,
+created_at,
+note,
+receipt_id
+)
+SELECT
+((random()*9)+16)::int,
+((random()*199)+1)::int,
+(ARRAY['IMPORT','EXPORT'])[floor(random()*2)+1]::inventories_type,
+(random()*20)+1,
+now(),
+'Inventory movement',
+((random()*199)+1)::int
+FROM generate_series(1,500);
+
+-- =============================
+-- ORDER DETAIL FILL
+-- =============================
+
+INSERT INTO order_detail_fill(order_detail_id,batch_id,quantity,created_at)
+SELECT
+order_detail_id,
+((random()*199)+1)::int,
+(random()*5)+1,
+now()
+FROM order_details;
+
+-- =============================
+-- FEEDBACK
+-- =============================
+
+INSERT INTO quality_feedbacks(order_id,rating,comment,created_at)
+SELECT
+order_id,
+((random()*4)+1)::int,
+'Customer feedback',
+now()
+FROM orders
+WHERE status='DONE'
+LIMIT 50;
+
+COMMIT;
 
 /*=========================================================================================================*/
 /*=========================================================================================================*/
