@@ -16,7 +16,9 @@ CREATE TYPE "orders_status" AS ENUM (
 
 CREATE TYPE "log_batches_enum" AS ENUM (
     'PROCESSING',
+	'WAITING_TO_CONFIRM',
     'DONE',
+	'WAITING_TO_CANCLE',
     'EXPIRED',
     'DAMAGED'
     );
@@ -29,12 +31,6 @@ CREATE TYPE "log_batches_type" AS ENUM (
 CREATE TYPE "inventories_type" AS ENUM (
     'IMPORT',
     'EXPORT'
-    );
-
-CREATE TYPE "delivery_status" AS ENUM (
-    'WAITTING',
-    'PROCESSING',
-    'DONE'
     );
 
 CREATE TYPE "receipt_status" AS ENUM (
