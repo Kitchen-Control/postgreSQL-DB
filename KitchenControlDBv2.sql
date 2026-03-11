@@ -433,27 +433,49 @@ INSERT INTO production_plan_details(plan_id,product_id,quantity,note) VALUES
 -- LOG BATCHES
 -- =============================
 INSERT INTO log_batches(plan_id,product_id,quantity,production_date,expiry_date,status,type,created_at) VALUES
-(1, 9,  50, '2026-03-02', '2027-03-02', 'DONE',       'PRODUCTION', now()),  -- batch_id=1: Strawberry 2026-03-02 + 365 = 2027-03-02
-(1, 10, 50, '2026-03-02', '2027-03-02', 'DONE',       'PRODUCTION', now()),  -- batch_id=2: Chocolate  2026-03-02 + 365 = 2027-03-02
-(2, 11, 40, '2026-03-07', '2027-03-07', 'DONE',       'PRODUCTION', now()),  -- batch_id=3: Tiramisu   2026-03-07 + 365 = 2027-03-07
-(2, 12, 60, '2026-03-07', '2027-03-07', 'DONE',       'PRODUCTION', now()),  -- batch_id=4: Matcha     2026-03-07 + 365 = 2027-03-07
-(3, 13,100, '2026-03-12', '2027-03-12', 'DONE',       'PRODUCTION', now()),  -- batch_id=5: Cupcake    2026-03-12 + 365 = 2027-03-12
-(3, 14, 30, '2026-03-12', '2027-03-12', 'DONE',       'PRODUCTION', now()),  -- batch_id=6: Cheesecake 2026-03-12 + 365 = 2027-03-12
-(4, 15, 50, '2026-03-16', '2027-03-16', 'DONE',       'PRODUCTION', now()),  -- batch_id=7: Croissant  2026-03-16 + 365 = 2027-03-16
-(5, 9,  80, '2026-03-20', '2027-03-20', 'PROCESSING', 'PRODUCTION', now()),  -- batch_id=8: Strawberry 2026-03-20 + 365 = 2027-03-20 (chưa nhập kho)
-(5, 10, 80, '2026-03-20', '2027-03-20', 'PROCESSING', 'PRODUCTION', now());  -- batch_id=9: Chocolate  2026-03-20 + 365 = 2027-03-20 (chưa nhập kho)
+-- OLD DATA =============================================
+--(1, 9,  50, '2026-03-02', '2027-03-02', 'DONE',       'PRODUCTION', now()),  -- batch_id=1: Strawberry 2026-03-02 + 365 = 2027-03-02
+--(1, 10, 50, '2026-03-02', '2027-03-02', 'DONE',       'PRODUCTION', now()),  -- batch_id=2: Chocolate  2026-03-02 + 365 = 2027-03-02
+--(2, 11, 40, '2026-03-07', '2027-03-07', 'DONE',       'PRODUCTION', now()),  -- batch_id=3: Tiramisu   2026-03-07 + 365 = 2027-03-07
+--(2, 12, 60, '2026-03-07', '2027-03-07', 'DONE',       'PRODUCTION', now()),  -- batch_id=4: Matcha     2026-03-07 + 365 = 2027-03-07
+--(3, 13,100, '2026-03-12', '2027-03-12', 'DONE',       'PRODUCTION', now()),  -- batch_id=5: Cupcake    2026-03-12 + 365 = 2027-03-12
+--(3, 14, 30, '2026-03-12', '2027-03-12', 'DONE',       'PRODUCTION', now()),  -- batch_id=6: Cheesecake 2026-03-12 + 365 = 2027-03-12
+--(4, 15, 50, '2026-03-16', '2027-03-16', 'DONE',       'PRODUCTION', now()),  -- batch_id=7: Croissant  2026-03-16 + 365 = 2027-03-16
+--(5, 9,  80, '2026-03-20', '2027-03-20', 'PROCESSING', 'PRODUCTION', now()),  -- batch_id=8: Strawberry 2026-03-20 + 365 = 2027-03-20 (chưa nhập kho)
+--(5, 10, 80, '2026-03-20', '2027-03-20', 'PROCESSING', 'PRODUCTION', now());  -- batch_id=9: Chocolate  2026-03-20 + 365 = 2027-03-20 (chưa nhập kho)
+
+--NEW DATA =============================================
+(1,  9, 5000,'2026-03-02','2027-03-02','DONE',       'PRODUCTION', now()),  -- batch_id=1
+(1, 10, 5000,'2026-03-02','2027-03-02','DONE',       'PRODUCTION', now()),  -- batch_id=2
+(2, 11, 4000,'2026-03-07','2027-03-07','DONE',       'PRODUCTION', now()),  -- batch_id=3
+(2, 12, 6000,'2026-03-07','2027-03-07','DONE',       'PRODUCTION', now()),  -- batch_id=4
+(3, 13,10000,'2026-03-12','2027-03-12','DONE',       'PRODUCTION', now()),  -- batch_id=5
+(3, 14, 3000,'2026-03-12','2027-03-12','DONE',       'PRODUCTION', now()),  -- batch_id=6
+(4, 15, 5000,'2026-03-16','2027-03-16','DONE',       'PRODUCTION', now()),  -- batch_id=7
+(5,  9, 8000,'2026-03-20','2027-03-20','PROCESSING', 'PRODUCTION', now()),  -- batch_id=8
+(5, 10, 8000,'2026-03-20','2027-03-20','PROCESSING', 'PRODUCTION', now());  -- batch_id=9
 
 -- =============================
 -- INVENTORIES
 -- =============================
 INSERT INTO inventories(product_id,batch_id,quantity,expiry_date) VALUES
-(9,  1, 40, '2027-03-02'),  -- Strawberry Cake  lô 1: 50 sản xuất - 10 xuất (order 1 fill, chưa trừ kho) = 40 còn lại
-(10, 2, 45, '2027-03-02'),  -- Chocolate Cake   lô 2: 50 sản xuất - 5  xuất (order 1 fill, chưa trừ kho) = 45 còn lại
-(11, 3, 34, '2027-03-07'),  -- Tiramisu         lô 3: 40 sản xuất - 6  xuất (order 2 fill) = 34 còn lại
-(12, 4, 50, '2027-03-07'),  -- Matcha Cake      lô 4: 60 sản xuất - 10 xuất (order 3, đã EXPORT transaction) = 50 còn lại
-(13, 5, 80, '2027-03-12'),  -- Cupcake          lô 5: 100 sản xuất - 20 xuất (order 4, đã EXPORT transaction) = 80 còn lại
-(14, 6, 25, '2027-03-12'),  -- Cheesecake       lô 6: 30 sản xuất - 5  xuất (order 5, đã EXPORT transaction) = 25 còn lại
-(15, 7, 42, '2027-03-16');  -- Croissant        lô 7: 50 sản xuất - 8  xuất (order 6, đã EXPORT transaction) = 42 còn lại
+-- OLD DATA =============================================
+--(9,  1, 40, '2027-03-02'),  -- Strawberry Cake  lô 1: 50 sản xuất - 10 xuất (order 1 fill, chưa trừ kho) = 40 còn lại
+--(10, 2, 45, '2027-03-02'),  -- Chocolate Cake   lô 2: 50 sản xuất - 5  xuất (order 1 fill, chưa trừ kho) = 45 còn lại
+--(11, 3, 34, '2027-03-07'),  -- Tiramisu         lô 3: 40 sản xuất - 6  xuất (order 2 fill) = 34 còn lại
+--(12, 4, 50, '2027-03-07'),  -- Matcha Cake      lô 4: 60 sản xuất - 10 xuất (order 3, đã EXPORT transaction) = 50 còn lại
+--(13, 5, 80, '2027-03-12'),  -- Cupcake          lô 5: 100 sản xuất - 20 xuất (order 4, đã EXPORT transaction) = 80 còn lại
+--(14, 6, 25, '2027-03-12'),  -- Cheesecake       lô 6: 30 sản xuất - 5  xuất (order 5, đã EXPORT transaction) = 25 còn lại
+--(15, 7, 42, '2027-03-16');  -- Croissant        lô 7: 50 sản xuất - 8  xuất (order 6, đã EXPORT transaction) = 42 còn lại
+
+-- NEW DATA =============================================
+(9,  1, 4990, '2027-03-02'),  -- Strawberry Cake  lô 1: 5000 sản xuất - 10 xuất (order 1 fill, chưa trừ kho) = 4990 còn lại
+(10, 2, 4995, '2027-03-02'),  -- Chocolate Cake   lô 2: 5000 sản xuất - 5  xuất (order 1 fill, chưa trừ kho) = 4995 còn lại
+(11, 3, 3994, '2027-03-07'),  -- Tiramisu         lô 3: 4000 sản xuất - 6  xuất (order 2 fill) = 3994 còn lại
+(12, 4, 5990, '2027-03-07'),  -- Matcha Cake      lô 4: 6000 sản xuất - 10 xuất (order 3, đã EXPORT transaction) = 5990 còn lại
+(13, 5, 9980, '2027-03-12'),  -- Cupcake          lô 5: 10000 sản xuất - 20 xuất (order 4, đã EXPORT transaction) = 9980 còn lại
+(14, 6, 2995, '2027-03-12'),  -- Cheesecake       lô 6: 3000 sản xuất - 5  xuất (order 5, đã EXPORT transaction) = 2995 còn lại
+(15, 7, 4992, '2027-03-16');  -- Croissant        lô 7: 5000 sản xuất - 8  xuất (order 6, đã EXPORT transaction) = 4992 còn lại
 
 -- =============================
 -- DELIVERIES
