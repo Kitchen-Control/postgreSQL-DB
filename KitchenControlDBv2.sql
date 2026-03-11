@@ -419,15 +419,27 @@ INSERT INTO production_plans(plan_date,start_date,end_date,status,note) VALUES
 -- PRODUCTION PLAN DETAILS
 -- =============================
 INSERT INTO production_plan_details(plan_id,product_id,quantity,note) VALUES
-(1, 9,  50, 'Strawberry Cake — plan 1'),   -- plan_detail_id=1
-(1, 10, 50, 'Chocolate Cake — plan 1'),    -- plan_detail_id=2
-(2, 11, 40, 'Tiramisu — plan 2'),          -- plan_detail_id=3
-(2, 12, 60, 'Matcha Cake — plan 2'),       -- plan_detail_id=4
-(3, 13,100, 'Cupcake — plan 3'),           -- plan_detail_id=5
-(3, 14, 30, 'Cheesecake — plan 3'),        -- plan_detail_id=6
-(4, 15, 50, 'Croissant — plan 4'),         -- plan_detail_id=7
-(5, 9,  80, 'Strawberry Cake — plan 5'),   -- plan_detail_id=8
-(5, 10, 80, 'Chocolate Cake — plan 5');    -- plan_detail_id=9
+-- OLD DATA =============================================
+--(1, 9,  50, 'Strawberry Cake — plan 1'),   -- plan_detail_id=1
+--(1, 10, 50, 'Chocolate Cake — plan 1'),    -- plan_detail_id=2
+--(2, 11, 40, 'Tiramisu — plan 2'),          -- plan_detail_id=3
+--(2, 12, 60, 'Matcha Cake — plan 2'),       -- plan_detail_id=4
+--(3, 13,100, 'Cupcake — plan 3'),           -- plan_detail_id=5
+--(3, 14, 30, 'Cheesecake — plan 3'),        -- plan_detail_id=6
+--(4, 15, 50, 'Croissant — plan 4'),         -- plan_detail_id=7
+--(5, 9,  80, 'Strawberry Cake — plan 5'),   -- plan_detail_id=8
+--(5, 10, 80, 'Chocolate Cake — plan 5');    -- plan_detail_id=9
+
+-- NEW DATA =============================================
+(1,  9, 5000, 'Strawberry Cake — plan 1'),
+(1, 10, 5000, 'Chocolate Cake — plan 1'),
+(2, 11, 4000, 'Tiramisu — plan 2'),
+(2, 12, 6000, 'Matcha Cake — plan 2'),
+(3, 13,10000, 'Cupcake — plan 3'),
+(3, 14, 3000, 'Cheesecake — plan 3'),
+(4, 15, 5000, 'Croissant — plan 4'),
+(5,  9, 8000, 'Strawberry Cake — plan 5'),
+(5, 10, 8000, 'Chocolate Cake — plan 5');
 
 -- =============================
 -- LOG BATCHES
