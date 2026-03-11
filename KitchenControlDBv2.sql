@@ -468,14 +468,14 @@ INSERT INTO deliveries(delivery_date,shipper_id,created_at, status) VALUES
 -- ORDERS
 -- =============================
 INSERT INTO orders(delivery_id,store_id,order_date,status,img,comment) VALUES
-(NULL, 1, '2026-03-05 08:00:00', 'WAITTING',   NULL, ''),  -- order_id=1: Store 1, chưa xử lý, chưa có delivery
-(NULL, 2, '2026-03-05 09:00:00', 'WAITTING', NULL, ''),  -- order_id=2: Store 2, đang xử lý, chưa có delivery
+(NULL, 1, '2026-03-05 08:00:00', 'WAITING',   NULL, ''),  -- order_id=1: Store 1, chưa xử lý, chưa có delivery
+(NULL, 2, '2026-03-05 09:00:00', 'WAITING', NULL, ''),  -- order_id=2: Store 2, đang xử lý, chưa có delivery
 (2,    3, '2026-03-06 08:00:00', 'DISPATCHED', NULL, ''),  -- order_id=3: Store 3, đã dispatch → có delivery_id=2
 (3,    4, '2026-03-07 08:00:00', 'DELIVERING', NULL, ''),  -- order_id=4: Store 4, đang giao → có delivery_id=3
 (1,    5, '2026-03-05 10:00:00', 'DONE',       NULL, ''),  -- order_id=5: Store 5, đã hoàn thành → delivery_id=1
 (1,    1, '2026-03-05 11:00:00', 'DONE',       NULL, ''),  -- order_id=6: Store 1, đã hoàn thành → delivery_id=1
-(NULL, 2, '2026-03-08 08:00:00', 'WAITTING', NULL, ''),  -- order_id=7: Store 2, đang xử lý, chưa có delivery
-(NULL, 3, '2026-03-08 09:00:00', 'WAITTING',   NULL, '');  -- order_id=8: Store 3, chưa xử lý, chưa có delivery
+(NULL, 2, '2026-03-08 08:00:00', 'WAITING', NULL, ''),  -- order_id=7: Store 2, đang xử lý, chưa có delivery
+(NULL, 3, '2026-03-08 09:00:00', 'WAITING',   NULL, '');  -- order_id=8: Store 3, chưa xử lý, chưa có delivery
 
 -- =============================
 -- ORDER DETAILS
@@ -495,14 +495,14 @@ INSERT INTO order_details(order_id,product_id,quantity) VALUES
 -- RECEIPTS
 -- =============================
 INSERT INTO receipts(receipt_code,order_id,status,note) VALUES
-('PXK-001', 1, 'DRAFT',     'Phiếu xuất cho order 1 — đang soạn vì order còn WAITTING'),   -- receipt_id=1
+('PXK-001', 1, 'DRAFT',     'Phiếu xuất cho order 1 — đang soạn vì order còn WAITING'),   -- receipt_id=1
 ('PXK-002', 2, 'DRAFT',     'Phiếu xuất cho order 2 — đang soạn vì order còn PROCESSING'), -- receipt_id=2
 ('PXK-003', 3, 'COMPLETED', 'Phiếu xuất cho order 3 — đã xuất kho, order DISPATCHED'),      -- receipt_id=3
 ('PXK-004', 4, 'COMPLETED', 'Phiếu xuất cho order 4 — đã xuất kho, order DELIVERING'),      -- receipt_id=4 [SỬA: DRAFT→COMPLETED]
 ('PXK-005', 5, 'COMPLETED', 'Phiếu xuất cho order 5 — đã xuất kho, order DONE'),            -- receipt_id=5
 ('PXK-006', 6, 'COMPLETED', 'Phiếu xuất cho order 6 — đã xuất kho, order DONE'),            -- receipt_id=6 [SỬA: thêm mới]
 ('PXK-007', 7, 'DRAFT',     'Phiếu xuất cho order 7 — đang soạn vì order còn PROCESSING'), -- receipt_id=7 [SỬA: thêm mới]
-('PXK-008', 8, 'DRAFT',     'Phiếu xuất cho order 8 — đang soạn vì order còn WAITTING');   -- receipt_id=8 [SỬA: thêm mới]
+('PXK-008', 8, 'DRAFT',     'Phiếu xuất cho order 8 — đang soạn vì order còn WAITING');   -- receipt_id=8 [SỬA: thêm mới]
 
 -- =============================
 -- INVENTORY TRANSACTIONS
