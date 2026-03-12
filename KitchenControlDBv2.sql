@@ -10,8 +10,7 @@ CREATE SCHEMA public;
 
 -- 3. Cấp lại quyền truy cập cho user của bạn (User trong ảnh bạn gửi)
 GRANT ALL ON SCHEMA public TO public;
--- GRANT ALL ON SCHEMA public TO central_kitchen_user;
-GRANT ALL ON SCHEMA public TO kitchencontroldb_user;
+GRANT ALL ON SCHEMA public TO central_kitchen_user;
 
 COMMIT;
 /*=========================================================================================================*/
@@ -515,7 +514,8 @@ INSERT INTO deliveries(delivery_date,shipper_id,created_at, status) VALUES
 ('2026-03-05', 12, now(), 'DONE'),  -- delivery_id=1, Shipper A giao ngày 05/03
 ('2026-03-06', 13, now(), 'DONE'),  -- delivery_id=2, Shipper B giao ngày 06/03
 ('2026-03-07', 14, now(), 'DONE'),  -- delivery_id=3, Shipper C giao ngày 07/03
-('2026-03-08', 15, now(), 'DONE');  -- delivery_id=4, Shipper D giao ngày 08/03
+('2026-03-08', 15, now(), 'DONE'),  -- delivery_id=4, Shipper D giao ngày 08/03
+('2026-03-14', 15, now(), 'DRAFT');  -- delivery_id=4, Shipper D giao ngày 14/03
 
 -- =============================
 -- ORDERS
@@ -527,8 +527,8 @@ INSERT INTO orders(delivery_id,store_id,order_date,status,img,comment) VALUES
 (3,    4, '2026-03-07 08:00:00', 'DELIVERING', NULL, ''),  -- order_id=4: Store 4, đang giao → có delivery_id=3
 (1,    5, '2026-03-05 10:00:00', 'DONE',       NULL, ''),  -- order_id=5: Store 5, đã hoàn thành → delivery_id=1
 (1,    1, '2026-03-05 11:00:00', 'DONE',       NULL, ''),  -- order_id=6: Store 1, đã hoàn thành → delivery_id=1
-(NULL, 2, '2026-03-08 08:00:00', 'WAITING', NULL, ''),  -- order_id=7: Store 2, đang xử lý, chưa có delivery
-(NULL, 3, '2026-03-08 09:00:00', 'WAITING',   NULL, '');  -- order_id=8: Store 3, chưa xử lý, chưa có delivery
+(5, 2, '2026-03-08 08:00:00', 'PROCESSING', NULL, ''),  -- order_id=7: Store 2, đang xử lý, → delivery_id=5
+(5, 3, '2026-03-08 09:00:00', 'PROCESSING',   NULL, '');  -- order_id=8: Store 3, chưa xử lý, → delivery_id=5
 
 -- =============================
 -- ORDER DETAILS
@@ -548,14 +548,10 @@ INSERT INTO order_details(order_id,product_id,quantity) VALUES
 -- RECEIPTS
 -- =============================
 INSERT INTO receipts(receipt_code,order_id,status,note) VALUES
-('PXK-001', 1, 'DRAFT',     'Phiếu xuất cho order 1 — đang soạn vì order còn WAITING'),   -- receipt_id=1
-('PXK-002', 2, 'DRAFT',     'Phiếu xuất cho order 2 — đang soạn vì order còn PROCESSING'), -- receipt_id=2
 ('PXK-003', 3, 'COMPLETED', 'Phiếu xuất cho order 3 — đã xuất kho, order DISPATCHED'),      -- receipt_id=3
 ('PXK-004', 4, 'COMPLETED', 'Phiếu xuất cho order 4 — đã xuất kho, order DELIVERING'),      -- receipt_id=4 [SỬA: DRAFT→COMPLETED]
 ('PXK-005', 5, 'COMPLETED', 'Phiếu xuất cho order 5 — đã xuất kho, order DONE'),            -- receipt_id=5
 ('PXK-006', 6, 'COMPLETED', 'Phiếu xuất cho order 6 — đã xuất kho, order DONE'),            -- receipt_id=6 [SỬA: thêm mới]
-('PXK-007', 7, 'DRAFT',     'Phiếu xuất cho order 7 — đang soạn vì order còn PROCESSING'), -- receipt_id=7 [SỬA: thêm mới]
-('PXK-008', 8, 'DRAFT',     'Phiếu xuất cho order 8 — đang soạn vì order còn WAITING');   -- receipt_id=8 [SỬA: thêm mới]
 
 -- =============================
 -- INVENTORY TRANSACTIONS
@@ -627,3 +623,4 @@ COMMIT;
 /*=============================================ADDING MOCK DATA============================================*/
 /*=========================================================================================================*/
 /*=========================================================================================================*/
+
