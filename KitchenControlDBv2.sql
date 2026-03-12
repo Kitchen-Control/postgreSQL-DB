@@ -1,3 +1,22 @@
+/*=========================================================================================================*/
+--CODE FOR RESET DATABASE POSTGRESQL
+-- 1. Xóa sổ toàn bộ Schema public (bao gồm mọi Table, View, Type,...)
+BEGIN;
+
+DROP SCHEMA public CASCADE;
+
+-- 2. Tạo lại Schema public mới trắng tinh
+CREATE SCHEMA public;
+
+-- 3. Cấp lại quyền truy cập cho user của bạn (User trong ảnh bạn gửi)
+GRANT ALL ON SCHEMA public TO public;
+-- GRANT ALL ON SCHEMA public TO central_kitchen_user;
+GRANT ALL ON SCHEMA public TO kitchencontroldb_user;
+
+COMMIT;
+/*=========================================================================================================*/
+
+
 CREATE TYPE "product_type_enum" AS ENUM (
     'RAW_MATERIAL',
     'SEMI_FINISHED',
@@ -607,19 +626,4 @@ COMMIT;
 /*=========================================================================================================*/
 /*=============================================ADDING MOCK DATA============================================*/
 /*=========================================================================================================*/
-/*=========================================================================================================*/
-
-
-/*=========================================================================================================*/
---CODE FOR RESET DATABASE POSTGRESQL
--- 1. Xóa sổ toàn bộ Schema public (bao gồm mọi Table, View, Type,...)
-DROP SCHEMA public CASCADE;
-
--- 2. Tạo lại Schema public mới trắng tinh
-CREATE SCHEMA public;
-
--- 3. Cấp lại quyền truy cập cho user của bạn (User trong ảnh bạn gửi)
-GRANT ALL ON SCHEMA public TO public;
--- GRANT ALL ON SCHEMA public TO central_kitchen_user;
-GRANT ALL ON SCHEMA public TO kitchencontroldb_user;
 /*=========================================================================================================*/
