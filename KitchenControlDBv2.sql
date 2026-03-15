@@ -35,7 +35,6 @@ COMMIT;
 
 CREATE TYPE "product_type_enum" AS ENUM (
     'RAW_MATERIAL',
-    'SEMI_FINISHED',
     'MAIN',
 	'SIDE',
 	'BEVERAGE',
