@@ -78,7 +78,6 @@ CREATE TYPE "receipt_status" AS ENUM (
 );
 
 CREATE TYPE "deliveries_status" AS ENUM (
-	'DRAFT',
     'WAITING',
     'DELIVERING',
 	'DONE',
