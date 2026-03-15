@@ -82,7 +82,7 @@ CREATE TYPE "deliveries_status" AS ENUM (
     'WAITING',
     'DELIVERING',
 	'DONE',
-	'CANCEL'
+	'CANCELED'
     );
 
 CREATE TYPE "production_plan_status" AS ENUM (
