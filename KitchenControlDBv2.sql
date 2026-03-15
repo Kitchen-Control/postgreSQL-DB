@@ -362,27 +362,50 @@ INSERT INTO users(username,password,full_name,role_id,store_id) VALUES
 -- =============================
 -- PRODUCTS
 -- =============================
-INSERT INTO products(product_name,product_type,unit,shelf_life_days) VALUES
--- RAW MATERIALS (nguyên liệu thô)
-('Flour',             'RAW_MATERIAL',     'kg',     365),  -- product_id=1  [SỬA: 180→365]
-('Sugar',             'RAW_MATERIAL',     'kg',     365),  -- product_id=2  (giữ nguyên)
-('Milk',              'RAW_MATERIAL',     'liter',  365),  -- product_id=3  [SỬA: 30→365]
-('Butter',            'RAW_MATERIAL',     'kg',     365),  -- product_id=4  [SỬA: 90→365]
-('Chocolate',         'RAW_MATERIAL',     'kg',     365),  -- product_id=5  [SỬA: 120→365]
+-- INSERT INTO products(product_name,product_type,unit,shelf_life_days) VALUES
+-- -- RAW MATERIALS (nguyên liệu thô)
+-- ('Flour',             'RAW_MATERIAL',     'kg',     365),  -- product_id=1  [SỬA: 180→365]
+-- ('Sugar',             'RAW_MATERIAL',     'kg',     365),  -- product_id=2  (giữ nguyên)
+-- ('Milk',              'RAW_MATERIAL',     'liter',  365),  -- product_id=3  [SỬA: 30→365]
+-- ('Butter',            'RAW_MATERIAL',     'kg',     365),  -- product_id=4  [SỬA: 90→365]
+-- ('Chocolate',         'RAW_MATERIAL',     'kg',     365),  -- product_id=5  [SỬA: 120→365]
 
--- SEMI-FINISHED (bán thành phẩm)
-('Cake Base',         'SEMI_FINISHED',    'piece',  365),  -- product_id=6  [SỬA: 5→365]
-('Cream Mix',         'SEMI_FINISHED',    'kg',     365),  -- product_id=7  [SỬA: 3→365]
-('Chocolate Filling', 'SEMI_FINISHED',    'kg',     365),  -- product_id=8  [SỬA: 7→365]
+-- -- SEMI-FINISHED (bán thành phẩm)
+-- ('Cake Base',         'SEMI_FINISHED',    'piece',  365),  -- product_id=6  [SỬA: 5→365]
+-- ('Cream Mix',         'SEMI_FINISHED',    'kg',     365),  -- product_id=7  [SỬA: 3→365]
+-- ('Chocolate Filling', 'SEMI_FINISHED',    'kg',     365),  -- product_id=8  [SỬA: 7→365]
 
--- FINISHED PRODUCTS (thành phẩm)
-('Strawberry Cake',   'FINISHED_PRODUCT', 'piece',  365),  -- product_id=9  [SỬA: 3→365]
-('Chocolate Cake',    'FINISHED_PRODUCT', 'piece',  365),  -- product_id=10 [SỬA: 3→365]
-('Tiramisu',          'FINISHED_PRODUCT', 'piece',  365),  -- product_id=11 [SỬA: 2→365]
-('Matcha Cake',       'FINISHED_PRODUCT', 'piece',  365),  -- product_id=12 [SỬA: 3→365]
-('Cupcake',           'FINISHED_PRODUCT', 'piece',  365),  -- product_id=13 [SỬA: 4→365]
-('Cheesecake',        'FINISHED_PRODUCT', 'piece',  365),  -- product_id=14 [SỬA: 3→365]
-('Croissant',         'FINISHED_PRODUCT', 'piece',  365);  -- product_id=15 [SỬA: 2→365]
+-- -- FINISHED PRODUCTS (thành phẩm)
+-- ('Strawberry Cake',   'FINISHED_PRODUCT', 'piece',  365),  -- product_id=9  [SỬA: 3→365]
+-- ('Chocolate Cake',    'FINISHED_PRODUCT', 'piece',  365),  -- product_id=10 [SỬA: 3→365]
+-- ('Tiramisu',          'FINISHED_PRODUCT', 'piece',  365),  -- product_id=11 [SỬA: 2→365]
+-- ('Matcha Cake',       'FINISHED_PRODUCT', 'piece',  365),  -- product_id=12 [SỬA: 3→365]
+-- ('Cupcake',           'FINISHED_PRODUCT', 'piece',  365),  -- product_id=13 [SỬA: 4→365]
+-- ('Cheesecake',        'FINISHED_PRODUCT', 'piece',  365),  -- product_id=14 [SỬA: 3→365]
+-- ('Croissant',         'FINISHED_PRODUCT', 'piece',  365);  -- product_id=15 [SỬA: 2→365]
+
+INSERT INTO products(product_name,product_type,unit,price,shelf_life_days) VALUES
+-- RAW MATERIALS
+('Flour',             'RAW_MATERIAL',  'kg',     15000,  365),
+('Sugar',             'RAW_MATERIAL',  'kg',     20000,  365),
+('Milk',              'RAW_MATERIAL',  'liter',  25000,  365),
+('Butter',            'RAW_MATERIAL',  'kg',     80000,  365),
+('Chocolate',         'RAW_MATERIAL',  'kg',     120000, 365),
+
+-- SEMI-FINISHED
+('Cake Base',         'RAW_MATERIAL', 'piece',  30000,  365),
+('Cream Mix',         'RAW_MATERIAL', 'kg',     50000,  365),
+('Chocolate Filling', 'RAW_MATERIAL', 'kg',     60000,  365),
+
+-- [FIX] Đổi 'FINISHED_PRODUCT' → type hợp lệ trong enum.
+-- Các sản phẩm bánh ngọt dùng 'DESSERT', thêm price cho tất cả
+('Strawberry Cake',   'DESSERT',       'piece',  85000,  365),
+('Chocolate Cake',    'DESSERT',       'piece',  90000,  365),
+('Tiramisu',          'DESSERT',       'piece',  95000,  365),
+('Matcha Cake',       'DESSERT',       'piece',  85000,  365),
+('Cupcake',           'DESSERT',       'piece',  45000,  365),
+('Cheesecake',        'DESSERT',       'piece',  80000,  365),
+('Croissant',         'MAIN',          'piece',  35000,  365);
 
 -- =============================
 -- RECIPES
@@ -511,7 +534,7 @@ INSERT INTO log_batches(plan_id,product_id,quantity,production_date,expiry_date,
 -- =============================
 -- INVENTORIES
 -- =============================
-INSERT INTO inventories(product_id,batch_id,quantity,expiry_date) VALUES
+-- INSERT INTO inventories(product_id,batch_id,quantity,expiry_date) VALUES
 -- OLD DATA =============================================
 --(9,  1, 40, '2027-03-02'),  -- Strawberry Cake  lô 1: 50 sản xuất - 10 xuất (order 1 fill, chưa trừ kho) = 40 còn lại
 --(10, 2, 45, '2027-03-02'),  -- Chocolate Cake   lô 2: 50 sản xuất - 5  xuất (order 1 fill, chưa trừ kho) = 45 còn lại
@@ -522,13 +545,21 @@ INSERT INTO inventories(product_id,batch_id,quantity,expiry_date) VALUES
 --(15, 7, 42, '2027-03-16');  -- Croissant        lô 7: 50 sản xuất - 8  xuất (order 6, đã EXPORT transaction) = 42 còn lại
 
 -- NEW DATA =============================================
-(9,  1, 4990, '2027-03-02'),  -- Strawberry Cake  lô 1: 5000 sản xuất - 10 xuất (order 1 fill, chưa trừ kho) = 4990 còn lại
-(10, 2, 4995, '2027-03-02'),  -- Chocolate Cake   lô 2: 5000 sản xuất - 5  xuất (order 1 fill, chưa trừ kho) = 4995 còn lại
-(11, 3, 3994, '2027-03-07'),  -- Tiramisu         lô 3: 4000 sản xuất - 6  xuất (order 2 fill) = 3994 còn lại
-(12, 4, 5990, '2027-03-07'),  -- Matcha Cake      lô 4: 6000 sản xuất - 10 xuất (order 3, đã EXPORT transaction) = 5990 còn lại
-(13, 5, 9980, '2027-03-12'),  -- Cupcake          lô 5: 10000 sản xuất - 20 xuất (order 4, đã EXPORT transaction) = 9980 còn lại
-(14, 6, 2995, '2027-03-12'),  -- Cheesecake       lô 6: 3000 sản xuất - 5  xuất (order 5, đã EXPORT transaction) = 2995 còn lại
-(15, 7, 4992, '2027-03-16');  -- Croissant        lô 7: 5000 sản xuất - 8  xuất (order 6, đã EXPORT transaction) = 4992 còn lại
+-- (9,  1, 4990, '2027-03-02'),  -- Strawberry Cake  lô 1: 5000 sản xuất - 10 xuất (order 1 fill, chưa trừ kho) = 4990 còn lại
+-- (10, 2, 4995, '2027-03-02'),  -- Chocolate Cake   lô 2: 5000 sản xuất - 5  xuất (order 1 fill, chưa trừ kho) = 4995 còn lại
+-- (11, 3, 3994, '2027-03-07'),  -- Tiramisu         lô 3: 4000 sản xuất - 6  xuất (order 2 fill) = 3994 còn lại
+-- (12, 4, 5990, '2027-03-07'),  -- Matcha Cake      lô 4: 6000 sản xuất - 10 xuất (order 3, đã EXPORT transaction) = 5990 còn lại
+-- (13, 5, 9980, '2027-03-12'),  -- Cupcake          lô 5: 10000 sản xuất - 20 xuất (order 4, đã EXPORT transaction) = 9980 còn lại
+-- (14, 6, 2995, '2027-03-12'),  -- Cheesecake       lô 6: 3000 sản xuất - 5  xuất (order 5, đã EXPORT transaction) = 2995 còn lại
+-- (15, 7, 4992, '2027-03-16');  -- Croissant        lô 7: 5000 sản xuất - 8  xuất (order 6, đã EXPORT transaction) = 4992 còn lại
+INSERT INTO inventories(product_id,batch_id,quantity,expiry_date) VALUES
+(9,  1, 5000, '2027-03-02'),  -- [FIX] 5000 (DRAFT, chưa trừ kho)
+(10, 2, 5000, '2027-03-02'),  -- [FIX] 5000 (DRAFT, chưa trừ kho)
+(11, 3, 4000, '2027-03-07'),  -- [FIX] 4000 (DRAFT, chưa trừ kho)
+(12, 4, 5990, '2027-03-07'),  -- OK: 6000 - 10 = 5990
+(13, 5, 9980, '2027-03-12'),  -- OK: 10000 - 20 = 9980
+(14, 6, 2995, '2027-03-12'),  -- OK: 3000 - 5 = 2995
+(15, 7, 4992, '2027-03-16');  -- OK: 5000 - 8 = 4992
 
 -- =============================
 -- DELIVERIES
@@ -542,15 +573,25 @@ INSERT INTO deliveries(delivery_date,shipper_id,created_at, status) VALUES
 -- =============================
 -- ORDERS
 -- =============================
-INSERT INTO orders(delivery_id,store_id,order_date,status,img,comment) VALUES
-(NULL, 1, '2026-03-05 08:00:00', 'WAITING',   NULL, ''),  -- order_id=1: Store 1, chưa xử lý, chưa có delivery
-(NULL, 2, '2026-03-05 09:00:00', 'WAITING', NULL, ''),  -- order_id=2: Store 2, đang xử lý, chưa có delivery
-(2,    3, '2026-03-06 08:00:00', 'DISPATCHED', NULL, ''),  -- order_id=3: Store 3, đã dispatch → có delivery_id=2
-(3,    4, '2026-03-07 08:00:00', 'DELIVERING', NULL, ''),  -- order_id=4: Store 4, đang giao → có delivery_id=3
-(1,    5, '2026-03-05 10:00:00', 'DONE',       NULL, ''),  -- order_id=5: Store 5, đã hoàn thành → delivery_id=1
-(1,    1, '2026-03-05 11:00:00', 'DONE',       NULL, ''),  -- order_id=6: Store 1, đã hoàn thành → delivery_id=1
-(NULL, 2, '2026-03-08 08:00:00', 'WAITING', NULL, ''),  -- order_id=7: Store 2, đang xử lý, chưa có delivery
-(NULL, 3, '2026-03-08 09:00:00', 'WAITING',   NULL, '');  -- order_id=8: Store 3, chưa xử lý, chưa có delivery
+-- INSERT INTO orders(delivery_id,store_id,order_date,status,img,comment) VALUES
+-- (NULL, 1, '2026-03-05 08:00:00', 'WAITING',   NULL, ''),  -- order_id=1: Store 1, chưa xử lý, chưa có delivery
+-- (NULL, 2, '2026-03-05 09:00:00', 'WAITING', NULL, ''),  -- order_id=2: Store 2, đang xử lý, chưa có delivery
+-- (2,    3, '2026-03-06 08:00:00', 'DISPATCHED', NULL, ''),  -- order_id=3: Store 3, đã dispatch → có delivery_id=2
+-- (3,    4, '2026-03-07 08:00:00', 'DELIVERING', NULL, ''),  -- order_id=4: Store 4, đang giao → có delivery_id=3
+-- (1,    5, '2026-03-05 10:00:00', 'DONE',       NULL, ''),  -- order_id=5: Store 5, đã hoàn thành → delivery_id=1
+-- (1,    1, '2026-03-05 11:00:00', 'DONE',       NULL, ''),  -- order_id=6: Store 1, đã hoàn thành → delivery_id=1
+-- (NULL, 2, '2026-03-08 08:00:00', 'WAITING', NULL, ''),  -- order_id=7: Store 2, đang xử lý, chưa có delivery
+-- (NULL, 3, '2026-03-08 09:00:00', 'WAITING',   NULL, '');  -- order_id=8: Store 3, chưa xử lý, chưa có delivery
+-- [FIX] Thêm cột "type" vào tất cả INSERT (schema yêu cầu, trước đó bỏ sót)
+INSERT INTO orders(parent_order_id,delivery_id,store_id,order_date,type,status,img,comment) VALUES
+(NULL, NULL, 1, '2026-03-05 08:00:00', 'NORMAL', 'WAITING',    NULL, ''),
+(NULL, NULL, 2, '2026-03-05 09:00:00', 'NORMAL', 'WAITING',    NULL, ''),  -- [FIX] comment gốc ghi PROCESSING nhưng status là WAITING, giữ WAITING cho nhất quán
+(NULL, 2,    3, '2026-03-06 08:00:00', 'NORMAL', 'DISPATCHED', NULL, ''),
+(NULL, 3,    4, '2026-03-07 08:00:00', 'NORMAL', 'DELIVERING', NULL, ''),
+(NULL, 1,    5, '2026-03-05 10:00:00', 'NORMAL', 'DONE',       NULL, ''),
+(NULL, 1,    1, '2026-03-05 11:00:00', 'NORMAL', 'DONE',       NULL, ''),
+(NULL, NULL, 2, '2026-03-08 08:00:00', 'NORMAL', 'WAITING',    NULL, ''),
+(NULL, NULL, 3, '2026-03-08 09:00:00', 'NORMAL', 'WAITING',    NULL, '');
 
 -- =============================
 -- ORDER DETAILS
@@ -602,6 +643,8 @@ INSERT INTO inventory_transactions(product_id,batch_id,type,quantity,created_at,
 -- ORDER DETAIL FILL
 -- =============================
 INSERT INTO order_detail_fill(order_detail_id,batch_id,quantity,created_at) VALUES
+(1, 1, 10, now()),  -- [FIX] fill order_detail 1 (order 1, Strawberry qty=10) từ lô 1
+(2, 2,  5, now()),  -- [FIX] fill order_detail 2 (order 1, Chocolate qty=5)  từ lô 2
 -- order 2 (PROCESSING): order_detail_id=3, cần 6 Tiramisu → lấy từ lô 3
 (3, 3, 6,  now()),  -- fill order_detail 3 (order 2, Tiramisu qty=6) từ lô 3 ← [SỬA: thêm mới theo flow]
 
