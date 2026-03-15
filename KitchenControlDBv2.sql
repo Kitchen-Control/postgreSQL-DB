@@ -118,6 +118,7 @@ CREATE TABLE "products" (
                             "product_name" varchar,
                             "product_type" product_type_enum,
                             "unit" varchar,
+							"price" float,
                             "shelf_life_days" int
 );
 
