@@ -89,7 +89,8 @@ CREATE TYPE "production_plan_status" AS ENUM (
 	'WAITING',
     'PROCESSING',
 	'COMPLETE_ONE_SECTION',
-	'DONE'
+	'DONE',
+	'CANCEL'
     );
 
 CREATE TABLE "roles" (
