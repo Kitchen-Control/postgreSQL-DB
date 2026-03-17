@@ -506,9 +506,9 @@ INSERT INTO log_batches(plan_id,product_id,quantity,production_date,expiry_date,
 -- INVENTORIES
 -- =============================
 INSERT INTO inventories(product_id,batch_id,quantity,expiry_date) VALUES
-(9,  1, 5000, '2027-03-02'),  -- [FIX] 5000 (DRAFT, chưa trừ kho)
-(10, 2, 5000, '2027-03-02'),  -- [FIX] 5000 (DRAFT, chưa trừ kho)
-(11, 3, 4000, '2027-03-07'),  -- [FIX] 4000 (DRAFT, chưa trừ kho)
+(9,  1, 4990, '2027-03-02'),  -- [FIX] 5000 (DRAFT, chưa trừ kho)
+(10, 2, 4995, '2027-03-02'),  -- [FIX] 5000 (DRAFT, chưa trừ kho)
+(11, 3, 3994, '2027-03-07'),  -- [FIX] 4000 (DRAFT, chưa trừ kho)
 (12, 4, 5990, '2027-03-07'),  -- OK: 6000 - 10 = 5990
 (13, 5, 9980, '2027-03-12'),  -- OK: 10000 - 20 = 9980
 (14, 6, 2995, '2027-03-12'),  -- OK: 3000 - 5 = 2995
@@ -615,18 +615,18 @@ INSERT INTO order_detail_fill(order_detail_id,batch_id,quantity,created_at) VALU
 -- QUALITY FEEDBACKS
 -- =============================
 INSERT INTO quality_feedbacks(order_id,rating,comment,created_at) VALUES
-(5, 5, 'Great quality, very fresh!', now()),  -- feedback cho order 5 (DONE) ✅
-(6, 4, 'Good cake, will order again', now()); -- feedback cho order 6 (DONE) ✅
+(5, 5, 'Great quality, very fresh!', now()),  -- feedback cho order 5 (DONE)
+(6, 4, 'Good cake, will order again', now()); -- feedback cho order 6 (DONE)
 -- [SỬA] Xóa feedback của order 3 (status=DISPATCHED, chưa giao xong, không thể feedback)
 
--- =============================
--- REPORTS
--- =============================
-INSERT INTO reports(report_type,user_id,created_date) VALUES
-('SALES',       1, now()),  -- report_id=1: Admin tạo báo cáo doanh số
-('INVENTORY',   2, now()),  -- report_id=2: Manager tạo báo cáo tồn kho
-('PRODUCTION',  2, now()),  -- report_id=3: Manager tạo báo cáo sản xuất
-('DELIVERY',    1, now());  -- report_id=4: Admin tạo báo cáo giao hàng
+-- ============================================
+-- WASTE LOGS
+-- ============================================
+INSERT INTO waste_logs(product_id, batch_id, quantity, waste_type, order_id, note, created_at) VALUES
+(12, 4, 2, 'EXPIRED',          NULL, 'Matcha Cake hết hạn trong kho, hủy lô 4',          now()), -- Hàng hết hạn
+(13, 5, 3, 'DAMAGED_SHIPPING', 4,    'Cupcake bị hỏng khi giao order 4, lô 5',           now()), -- Hàng hỏng khi giao
+(15, 7, 1, 'DAMAGED_SHIPPING', 6,    'Croissant bị bể khi giao order 6, lô 7',           now()), -- Hàng hỏng khi giao
+(14, 6, 1, 'EXPIRED',          NULL, 'Cheesecake phát hiện hỏng khi kiểm tra lô 6',      now()); -- Hàng hết hạn
 
 COMMIT;
 
