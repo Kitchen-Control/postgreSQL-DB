@@ -409,7 +409,34 @@ INSERT INTO products(product_name,product_type,unit,price,shelf_life_days) VALUE
 ('Matcha Cake',       'DESSERT',       'piece',  85000,  365),
 ('Cupcake',           'DESSERT',       'piece',  45000,  365),
 ('Cheesecake',        'DESSERT',       'piece',  80000,  365),
-('Croissant',         'MAIN',          'piece',  35000,  365);
+('Croissant',         'MAIN',          'piece',  35000,  365),
+-- [NEW MOCK DATA] Thêm các sản phẩm đại diện (với shelf_life_days > 100)
+('Chicken Thigh',          'RAW_MATERIAL', 'kg',    60000,  150), -- 16
+('Coca Cola',              'BEVERAGE',     'can',   15000,  150), -- 17
+('Garlic Sauce',           'SAUCE',        'liter', 40000,  150), -- 18
+('Grilled Chicken Rice',   'MAIN',         'box',   55000,  150), -- 19
+('Mashed Potato',          'SIDE',         'box',   30000,  150), -- 20
+('Mango Pudding',          'DESSERT',      'piece', 25000,  150), -- 21
+-- [EXTENDED MOCK DATA] Thêm nguyên liệu thô và 10 món mới
+('Beef',                   'RAW_MATERIAL', 'kg',    150000, 150), -- 22
+('Pasta',                  'RAW_MATERIAL', 'kg',    30000,  150), -- 23
+('Tomato Sauce',           'SAUCE',        'liter', 25000,  150), -- 24
+('Pizza Dough',            'RAW_MATERIAL', 'piece', 15000,  150), -- 25
+('Cheese',                 'RAW_MATERIAL', 'kg',    180000, 150), -- 26
+('Potato',                 'RAW_MATERIAL', 'kg',    20000,  150), -- 27
+('Bread',                  'RAW_MATERIAL', 'piece', 5000,   150), -- 28
+('Coffee Bean',            'RAW_MATERIAL', 'kg',    250000, 150), -- 29
+('Chicken Wings',          'RAW_MATERIAL', 'kg',    70000,  150), -- 30
+('Beef Steak',             'MAIN',         'box',   120000, 150), -- 31
+('Spaghetti Bolognese',    'MAIN',         'box',   65000,  150), -- 32
+('Margherita Pizza',       'MAIN',         'box',   85000,  150), -- 33
+('Chicken Burger',         'MAIN',         'box',   45000,  150), -- 34
+('French Fries',           'SIDE',         'box',   25000,  150), -- 35
+('Garlic Bread',           'SIDE',         'box',   20000,  150), -- 36
+('Fried Chicken Wings',    'SIDE',         'box',   40000,  150), -- 37
+('Pepsi',                  'BEVERAGE',     'can',   15000,  150), -- 38
+('Orange Juice',           'BEVERAGE',     'cup',   25000,  150), -- 39
+('Iced Latte',             'BEVERAGE',     'cup',   35000,  150); -- 40
 
 -- =============================
 -- RECIPES
@@ -424,7 +451,21 @@ INSERT INTO recipes(product_id,recipe_name,yield_quantity,description) VALUES
 (12, 'Matcha Cake Recipe',       10, 'Matcha cake using Cake Base & Cream'),    -- recipe_id=7
 (13, 'Cupcake Recipe',           20, 'Small cupcake with cream topping'),       -- recipe_id=8
 (14, 'Cheesecake Recipe',        10, 'Classic cheesecake'),                     -- recipe_id=9
-(15, 'Croissant Recipe',         20, 'Buttery croissant');                      -- recipe_id=10
+(15, 'Croissant Recipe',         20, 'Buttery croissant'),                      -- recipe_id=10
+-- [NEW MOCK DATA] Công thức chế biến cho các món tự nấu 
+(18, 'Garlic Sauce Recipe',         10, 'Nấu sốt tỏi ngọt'),                           -- recipe_id = 11
+(19, 'Grilled Chicken Rice Recipe', 10, 'Cơm gà nướng với đùi gà và sốt tỏi'),         -- recipe_id = 12
+(20, 'Mashed Potato Recipe',        10, 'Khoai tây nghiền với bơ sữa'),                -- recipe_id = 13
+(21, 'Mango Pudding Recipe',        10, 'Pudding xoài thơm béo'),                      -- recipe_id = 14
+-- [EXTENDED MOCK DATA] Công thức cho các món mới
+(31, 'Beef Steak Recipe',           10, 'Beef Steak nấu bơ'),                          -- recipe_id = 15
+(32, 'Spaghetti Bolognese Recipe',  10, 'Mì ý bò băm sốt cà chua'),                    -- recipe_id = 16
+(33, 'Margherita Pizza Recipe',     10, 'Pizza phô mai cơ bản'),                       -- recipe_id = 17
+(34, 'Chicken Burger Recipe',       10, 'Burger gà phô mai'),                          -- recipe_id = 18
+(35, 'French Fries Recipe',         10, 'Khoai tây chiên'),                            -- recipe_id = 19
+(36, 'Garlic Bread Recipe',         10, 'Bánh mì nướng bơ tỏi'),                       -- recipe_id = 20
+(37, 'Fried Chicken Wings Recipe',  10, 'Cánh gà chiên giòn'),                         -- recipe_id = 21
+(40, 'Iced Latte Recipe',           10, 'Cà phê sữa đá pha từ hạt');                   -- recipe_id = 22
 
 -- =============================
 -- RECIPE DETAILS
@@ -462,7 +503,34 @@ INSERT INTO recipe_details(recipe_id,raw_material_id,quantity) VALUES
 -- Recipe 10: Croissant (product_id=15) — dùng RAW MATERIAL
 (10, 1, 3.0),  -- Croissant dùng Flour: 3 kg
 (10, 4, 2.0),  -- Croissant dùng Butter: 2 kg
-(10, 2, 0.5);  -- Croissant dùng Sugar: 0.5 kg
+(10, 2, 0.5),  -- Croissant dùng Sugar: 0.5 kg
+-- [NEW MOCK DATA] Vật liệu tiêu hao cho công thức mới
+(11, 2,  1.0), -- Garlic Sauce (Recipe 11) tốn 1kg Sugar (id=2)
+(12, 16, 5.0), -- Grilled Chicken Rice (Recipe 12) tốn 5kg Chicken Thigh (id=16)
+(12, 18, 0.5), -- Grilled Chicken Rice (Recipe 12) tốn 0.5L Garlic Sauce (id=18)
+(13, 4,  2.0), -- Mashed Potato (Recipe 13) tốn 2kg Butter (id=4)
+(13, 3,  1.0), -- Mashed Potato (Recipe 13) tốn 1L Milk (id=3)
+(14, 3,  2.0), -- Mango Pudding (Recipe 14) tốn 2L Milk (id=3)
+(14, 2,  1.0), -- Mango Pudding (Recipe 14) tốn 1kg Sugar (id=2)
+-- [EXTENDED MOCK DATA] Vật liệu tiêu hao cho 8 công thức mới
+(15, 22, 5.0), -- Beef Steak (Recipe 15) tốn 5kg Beef
+(15, 4,  1.0), -- Beef Steak (Recipe 15) tốn 1kg Butter
+(16, 23, 2.0), -- Spaghetti (Recipe 16) tốn 2kg Pasta
+(16, 22, 2.0), -- Spaghetti (Recipe 16) tốn 2kg Beef
+(16, 24, 1.0), -- Spaghetti (Recipe 16) tốn 1L Tomato Sauce
+(17, 25, 10.0),-- Margherita (Recipe 17) tốn 10 Đế bành
+(17, 26, 2.0), -- Margherita (Recipe 17) tốn 2kg Cheese
+(17, 24, 1.0), -- Margherita (Recipe 17) tốn 1L Tomato Sauce
+(18, 28, 10.0),-- Chicken Burger (Recipe 18) tốn 10 Bread
+(18, 26, 1.0), -- Chicken Burger (Recipe 18) tốn 1kg Cheese
+(18, 16, 3.0), -- Chicken Burger (Recipe 18) tốn 3kg Chicken Thigh
+(19, 27, 5.0), -- French Fries (Recipe 19) tốn 5kg Potato
+(20, 28, 10.0),-- Garlic Bread (Recipe 20) tốn 10 Bread
+(20, 18, 0.5), -- Garlic Bread (Recipe 20) tốn 0.5L Garlic Sauce
+(21, 30, 5.0), -- Fried Chicken Wings (Recipe 21) tốn 5kg Chicken Wings
+(21, 1,  1.0), -- Fried Chicken Wings (Recipe 21) tốn 1kg Flour
+(22, 29, 0.5), -- Iced Latte (Recipe 22) tốn 0.5kg Coffee Bean
+(22, 3,  2.0); -- Iced Latte (Recipe 22) tốn 2L Milk
 
 -- =============================
 -- PRODUCTION PLANS
@@ -472,7 +540,11 @@ INSERT INTO production_plans(plan_date,start_date,end_date,status,note) VALUES
 ('2026-03-06', '2026-03-07', '2026-03-10', 'DONE',       'Weekly production batch 2'),  -- plan_id=2 [SỬA: PROCESSING→DONE vì các lô đã DONE]
 ('2026-03-11', '2026-03-12', '2026-03-14', 'DONE',       'Weekly production batch 3'),  -- plan_id=3 [SỬA: tương tự]
 ('2026-03-15', '2026-03-16', '2026-03-18', 'PROCESSING', 'Next batch'),                 -- plan_id=4
-('2026-03-19', '2026-03-20', '2026-03-22', 'PROCESSING', 'Upcoming production');        -- plan_id=5
+('2026-03-19', '2026-03-20', '2026-03-22', 'PROCESSING', 'Upcoming production'),        -- plan_id=5
+-- [NEW MOCK DATA] Lên kế hoạch sản xuất cho các món tự nấu
+('2026-03-20', '2026-03-21', '2026-03-22', 'DONE', 'Kế hoạch sản xuất hàng loạt mẻ đáp ứng testing (plan 6)'), -- plan_id = 6
+-- [EXTENDED MOCK DATA] Kế hoạch sản xuất các món mở rộng
+('2026-03-21', '2026-03-22', '2026-03-23', 'DONE', 'Sản xuất mở rộng 8 món mới (plan 7)'); -- plan_id = 7
 
 -- =============================
 -- PRODUCTION PLAN DETAILS
@@ -486,7 +558,21 @@ INSERT INTO production_plan_details(plan_id,product_id,quantity,note) VALUES
 (3, 14, 3000, 'Cheesecake — plan 3'),
 (4, 15, 5000, 'Croissant — plan 4'),
 (5,  9, 8000, 'Strawberry Cake — plan 5'),
-(5, 10, 8000, 'Chocolate Cake — plan 5');
+(5, 10, 8000, 'Chocolate Cake — plan 5'),
+-- [NEW MOCK DATA] Định mức số lượng sản xuất cho kế hoạch 6 (>1000 phần)
+(6, 18, 1500, 'Sản xuất Sốt Tỏi'),               
+(6, 19, 1500, 'Sản xuất Cơm Gà Nướng'),          
+(6, 20, 1500, 'Sản xuất Khoai Tây Nghiền'),      
+(6, 21, 1500, 'Sản xuất Mango Pudding'),
+-- [EXTENDED MOCK DATA] Định mức sản xuất cho plan 7 (8 món)
+(7, 31, 1500, 'Sản xuất Beef Steak'),
+(7, 32, 1500, 'Sản xuất Spaghetti Bolognese'),
+(7, 33, 1500, 'Sản xuất Margherita Pizza'),
+(7, 34, 1500, 'Sản xuất Chicken Burger'),
+(7, 35, 1500, 'Sản xuất French Fries'),
+(7, 36, 1500, 'Sản xuất Garlic Bread'),
+(7, 37, 1500, 'Sản xuất Fried Chicken Wings'),
+(7, 40, 1500, 'Sản xuất Iced Latte');
 
 -- =============================
 -- LOG BATCHES
@@ -500,7 +586,45 @@ INSERT INTO log_batches(plan_id,product_id,quantity,production_date,expiry_date,
 (3, 14, 3000,'2026-03-12','2027-03-12','DONE',       'PRODUCTION', now()),  -- batch_id=6
 (4, 15, 5000,'2026-03-16','2027-03-16','DONE',       'PRODUCTION', now()),  -- batch_id=7
 (5,  9, 8000,'2026-03-20','2027-03-20','PROCESSING', 'PRODUCTION', now()),  -- batch_id=8
-(5, 10, 8000,'2026-03-20','2027-03-20','PROCESSING', 'PRODUCTION', now());  -- batch_id=9
+(5, 10, 8000,'2026-03-20','2027-03-20','PROCESSING', 'PRODUCTION', now()),  -- batch_id=9
+-- [NEW MOCK DATA] Các lô nhập và sản xuất số lượng lớn (>1000)
+(NULL, 16, 2000, '2026-03-20', '2026-08-17', 'DONE', 'PURCHASE',   now()), -- batch_id = 10 (Mua Đùi gà)
+(NULL, 17, 2000, '2026-03-20', '2026-08-17', 'DONE', 'PURCHASE',   now()), -- batch_id = 11 (Mua Coca)
+(6,    18, 1500, '2026-03-22', '2026-08-19', 'DONE', 'PRODUCTION', now()), -- batch_id = 12 (Sản xuất Sốt Tỏi)
+(6,    19, 1500, '2026-03-22', '2026-08-19', 'DONE', 'PRODUCTION', now()), -- batch_id = 13 (Sản xuất Cơm Gà)
+(6,    20, 1500, '2026-03-22', '2026-08-19', 'DONE', 'PRODUCTION', now()), -- batch_id = 14 (Sản xuất Khoai Tây)
+(6,    21, 1500, '2026-03-22', '2026-08-19', 'DONE', 'PRODUCTION', now()), -- batch_id = 15 (Sản xuất Pudding)
+-- [EXTENDED MOCK DATA] Tạo lô PURCHASE cho 8 Raw Materials cũ chống rỗng kho
+(NULL, 1, 2000, '2026-03-20', '2026-08-17', 'DONE', 'PURCHASE',   now()), -- batch_id = 16 (Flour)
+(NULL, 2, 2000, '2026-03-20', '2026-08-17', 'DONE', 'PURCHASE',   now()), -- batch_id = 17 (Sugar)
+(NULL, 3, 2000, '2026-03-20', '2026-08-17', 'DONE', 'PURCHASE',   now()), -- batch_id = 18 (Milk)
+(NULL, 4, 2000, '2026-03-20', '2026-08-17', 'DONE', 'PURCHASE',   now()), -- batch_id = 19 (Butter)
+(NULL, 5, 2000, '2026-03-20', '2026-08-17', 'DONE', 'PURCHASE',   now()), -- batch_id = 20 (Chocolate)
+(NULL, 6, 2000, '2026-03-20', '2026-08-17', 'DONE', 'PURCHASE',   now()), -- batch_id = 21 (Cake Base)
+(NULL, 7, 2000, '2026-03-20', '2026-08-17', 'DONE', 'PURCHASE',   now()), -- batch_id = 22 (Cream Mix)
+(NULL, 8, 2000, '2026-03-20', '2026-08-17', 'DONE', 'PURCHASE',   now()), -- batch_id = 23 (Chocolate Filling)
+-- [EXTENDED MOCK DATA] Tạo lô PURCHASE cho Raw Materials mới
+(NULL, 22, 2000, '2026-03-20', '2026-08-17', 'DONE', 'PURCHASE',   now()), -- batch_id = 24 (Beef)
+(NULL, 23, 2000, '2026-03-20', '2026-08-17', 'DONE', 'PURCHASE',   now()), -- batch_id = 25 (Pasta)
+(NULL, 24, 2000, '2026-03-20', '2026-08-17', 'DONE', 'PURCHASE',   now()), -- batch_id = 26 (Tomato Sauce)
+(NULL, 25, 2000, '2026-03-20', '2026-08-17', 'DONE', 'PURCHASE',   now()), -- batch_id = 27 (Pizza Dough)
+(NULL, 26, 2000, '2026-03-20', '2026-08-17', 'DONE', 'PURCHASE',   now()), -- batch_id = 28 (Cheese)
+(NULL, 27, 2000, '2026-03-20', '2026-08-17', 'DONE', 'PURCHASE',   now()), -- batch_id = 29 (Potato)
+(NULL, 28, 2000, '2026-03-20', '2026-08-17', 'DONE', 'PURCHASE',   now()), -- batch_id = 30 (Bread)
+(NULL, 29, 2000, '2026-03-20', '2026-08-17', 'DONE', 'PURCHASE',   now()), -- batch_id = 31 (Coffee Bean)
+(NULL, 30, 2000, '2026-03-20', '2026-08-17', 'DONE', 'PURCHASE',   now()), -- batch_id = 32 (Chicken Wings)
+-- [EXTENDED MOCK DATA] Tạo lô PURCHASE cho Beverage mới (Pepsi, Orange Juice)
+(NULL, 38, 2000, '2026-03-20', '2026-08-17', 'DONE', 'PURCHASE',   now()), -- batch_id = 33 (Pepsi)
+(NULL, 39, 2000, '2026-03-20', '2026-08-17', 'DONE', 'PURCHASE',   now()), -- batch_id = 34 (Orange Juice)
+-- [EXTENDED MOCK DATA] Tạo lô PRODUCTION 8 cho 4 Món mới
+(7,    31, 1500, '2026-03-23', '2026-08-20', 'DONE', 'PRODUCTION', now()), -- batch_id = 35 (Beef Steak)
+(7,    32, 1500, '2026-03-23', '2026-08-20', 'DONE', 'PRODUCTION', now()), -- batch_id = 36 (Spaghetti)
+(7,    33, 1500, '2026-03-23', '2026-08-20', 'DONE', 'PRODUCTION', now()), -- batch_id = 37 (Margherita Pizza)
+(7,    34, 1500, '2026-03-23', '2026-08-20', 'DONE', 'PRODUCTION', now()), -- batch_id = 38 (Chicken Burger)
+(7,    35, 1500, '2026-03-23', '2026-08-20', 'DONE', 'PRODUCTION', now()), -- batch_id = 39 (French Fries)
+(7,    36, 1500, '2026-03-23', '2026-08-20', 'DONE', 'PRODUCTION', now()), -- batch_id = 40 (Garlic Bread)
+(7,    37, 1500, '2026-03-23', '2026-08-20', 'DONE', 'PRODUCTION', now()), -- batch_id = 41 (Fried Chicken Wings)
+(7,    40, 1500, '2026-03-23', '2026-08-20', 'DONE', 'PRODUCTION', now()); -- batch_id = 42 (Iced Latte)
 
 -- =============================
 -- INVENTORIES
@@ -512,7 +636,45 @@ INSERT INTO inventories(product_id,batch_id,quantity,expiry_date) VALUES
 (12, 4, 5990, '2027-03-07'),  -- OK: 6000 - 10 = 5990
 (13, 5, 9980, '2027-03-12'),  -- OK: 10000 - 20 = 9980
 (14, 6, 2995, '2027-03-12'),  -- OK: 3000 - 5 = 2995
-(15, 7, 4992, '2027-03-16');  -- OK: 5000 - 8 = 4992
+(15, 7, 4992, '2027-03-16'),  -- OK: 5000 - 8 = 4992
+-- [NEW MOCK DATA] Đẩy lô hàng khủng vào Tồn Kho Thực Tế (>1000)
+(16, 10, 2000, '2026-08-17'), -- Tồn đùi gà
+(17, 11, 2000, '2026-08-17'), -- Tồn Coca
+(18, 12, 1500, '2026-08-19'), -- Tồn Sốt tỏi
+(19, 13, 1500, '2026-08-19'), -- Tồn Cơm gà
+(20, 14, 1500, '2026-08-19'), -- Tồn Khoai tây nghiền
+(21, 15, 1500, '2026-08-19'), -- Tồn Pudding xoài
+-- [EXTENDED MOCK DATA] Tồn kho cho 8 Raw Materials cũ chống rỗng kho
+(1, 16, 2000, '2026-08-17'),
+(2, 17, 2000, '2026-08-17'),
+(3, 18, 2000, '2026-08-17'),
+(4, 19, 2000, '2026-08-17'),
+(5, 20, 2000, '2026-08-17'),
+(6, 21, 2000, '2026-08-17'),
+(7, 22, 2000, '2026-08-17'),
+(8, 23, 2000, '2026-08-17'),
+-- [EXTENDED MOCK DATA] Tồn kho cho Raw Materials mới
+(22, 24, 2000, '2026-08-17'),
+(23, 25, 2000, '2026-08-17'),
+(24, 26, 2000, '2026-08-17'),
+(25, 27, 2000, '2026-08-17'),
+(26, 28, 2000, '2026-08-17'),
+(27, 29, 2000, '2026-08-17'),
+(28, 30, 2000, '2026-08-17'),
+(29, 31, 2000, '2026-08-17'),
+(30, 32, 2000, '2026-08-17'),
+-- [EXTENDED MOCK DATA] Tồn kho cho Beverage mới
+(38, 33, 2000, '2026-08-17'),
+(39, 34, 2000, '2026-08-17'),
+-- [EXTENDED MOCK DATA] Tồn kho cho 8 Món mới (Thành phẩm nấu)
+(31, 35, 1500, '2026-08-20'),
+(32, 36, 1500, '2026-08-20'),
+(33, 37, 1500, '2026-08-20'),
+(34, 38, 1500, '2026-08-20'),
+(35, 39, 1500, '2026-08-20'),
+(36, 40, 1500, '2026-08-20'),
+(37, 41, 1500, '2026-08-20'),
+(40, 42, 1500, '2026-08-20');
 
 -- =============================
 -- DELIVERIES
@@ -577,7 +739,65 @@ INSERT INTO inventory_transactions(product_id,batch_id,type,quantity,created_at,
 (14, 6, 'EXPORT',  5, now(), 'Xuất kho cho order 5 - Cheesecake',       5),  -- transaction_id=3
 
 -- PXK-006: order 6 (DONE) — xuất Croissant lô 7 [SỬA: thêm mới]
-(15, 7, 'EXPORT',  8, now(), 'Xuất kho cho order 6 - Croissant',        6);  -- transaction_id=4
+(15, 7, 'EXPORT',  8, now(), 'Xuất kho cho order 6 - Croissant',        6),  -- transaction_id=4
+
+-- [NEW MOCK DATA] Lịch sử Nhập xuất kho (>1000 quy trình chuẩn)
+(16, 10, 'IMPORT', 2000, now(), 'Nhập kho lô mua Đùi gà (Raw Material)',  NULL),
+(17, 11, 'IMPORT', 2000, now(), 'Nhập kho lô mua Coca Cola (Beverage)',   NULL),
+(18, 12, 'IMPORT', 1500, now(), 'Nhập kho lô Sốt tỏi vừa nấu (Sauce)',    NULL),
+(19, 13, 'IMPORT', 1500, now(), 'Nhập kho lô Cơm gà nướng vừa nấu (Main)', NULL),
+(20, 14, 'IMPORT', 1500, now(), 'Nhập kho lô Khoai tây nghiền (Side)',    NULL),
+(21, 15, 'IMPORT', 1500, now(), 'Nhập kho lô Pudding xoài (Dessert)',     NULL),
+(2,  NULL, 'EXPORT', 300,  now(), 'Hệ thống tự động xuất Đường (Sugar) nấu Tỏi và Pudding',       NULL),
+(16, 10,   'EXPORT', 750,  now(), 'Hệ thống tự động xuất Đùi gà tử lô 10 nấu Cơm Gà Nướng',       NULL), 
+(18, 12,   'EXPORT', 75,   now(), 'Hệ thống tự động xuất Sốt Tỏi từ lô 12 chế biến Cơm Gà',       NULL),
+(4,  NULL, 'EXPORT', 300,  now(), 'Hệ thống tự động xuất Bơ (Butter) nấu Mash Potato',            NULL),
+(3,  NULL, 'EXPORT', 450,  now(), 'Hệ thống tự động xuất Sữa (Milk) nấu Potato & Pudding',        NULL),
+-- [EXTENDED MOCK DATA] Ghi nhận IMPORT cho Raw Material cũ
+(1, 16, 'IMPORT', 2000, now(), 'Nhập kho lô Flour', NULL),
+(2, 17, 'IMPORT', 2000, now(), 'Nhập kho lô Sugar', NULL),
+(3, 18, 'IMPORT', 2000, now(), 'Nhập kho lô Milk', NULL),
+(4, 19, 'IMPORT', 2000, now(), 'Nhập kho lô Butter', NULL),
+(5, 20, 'IMPORT', 2000, now(), 'Nhập kho lô Chocolate', NULL),
+(6, 21, 'IMPORT', 2000, now(), 'Nhập kho lô Cake Base', NULL),
+(7, 22, 'IMPORT', 2000, now(), 'Nhập kho lô Cream Mix', NULL),
+(8, 23, 'IMPORT', 2000, now(), 'Nhập kho lô Choco Filling', NULL),
+-- [EXTENDED MOCK DATA] IMPORT cho Raw Materials mới & Beverage
+(22, 24, 'IMPORT', 2000, now(), 'Nhập kho lô Beef', NULL),
+(23, 25, 'IMPORT', 2000, now(), 'Nhập kho lô Pasta', NULL),
+(24, 26, 'IMPORT', 2000, now(), 'Nhập kho lô Tomato Sauce', NULL),
+(25, 27, 'IMPORT', 2000, now(), 'Nhập kho lô Pizza Dough', NULL),
+(26, 28, 'IMPORT', 2000, now(), 'Nhập kho lô Cheese', NULL),
+(27, 29, 'IMPORT', 2000, now(), 'Nhập kho lô Potato', NULL),
+(28, 30, 'IMPORT', 2000, now(), 'Nhập kho lô Bread', NULL),
+(29, 31, 'IMPORT', 2000, now(), 'Nhập kho lô Coffee Bean', NULL),
+(30, 32, 'IMPORT', 2000, now(), 'Nhập kho lô Chicken Wings', NULL),
+(38, 33, 'IMPORT', 2000, now(), 'Nhập kho lô Pepsi', NULL),
+(39, 34, 'IMPORT', 2000, now(), 'Nhập kho lô Orange Juice', NULL),
+-- [EXTENDED MOCK DATA] IMPORT cho Thành phẩm
+(31, 35, 'IMPORT', 1500, now(), 'Nhập kho Beef Steak', NULL),
+(32, 36, 'IMPORT', 1500, now(), 'Nhập kho Spaghetti', NULL),
+(33, 37, 'IMPORT', 1500, now(), 'Nhập kho Pizza', NULL),
+(34, 38, 'IMPORT', 1500, now(), 'Nhập kho Chicken Burger', NULL),
+(35, 39, 'IMPORT', 1500, now(), 'Nhập kho French Fries', NULL),
+(36, 40, 'IMPORT', 1500, now(), 'Nhập kho Garlic Bread', NULL),
+(37, 41, 'IMPORT', 1500, now(), 'Nhập kho Fried Chicken Wings', NULL),
+(40, 42, 'IMPORT', 1500, now(), 'Nhập kho Iced Latte', NULL),
+-- [EXTENDED MOCK DATA] EXPORT trừ nguyên liệu 
+(22, 24, 'EXPORT', 10500, now(), 'Xuất thịt bò', NULL),
+(4,  19, 'EXPORT', 1500,  now(), 'Xuất bơ', NULL),
+(23, 25, 'EXPORT', 3000,  now(), 'Xuất Mì Ý', NULL),
+(24, 26, 'EXPORT', 3000,  now(), 'Xuất Tomato Sauce', NULL),
+(25, 27, 'EXPORT', 15000, now(), 'Xuất Pizza Dough', NULL),
+(26, 28, 'EXPORT', 4500,  now(), 'Xuất Cheese', NULL),
+(28, 30, 'EXPORT', 30000, now(), 'Xuất Bánh mì', NULL),
+(16, 10, 'EXPORT', 4500,  now(), 'Xuất Đùi Gà', NULL),
+(27, 29, 'EXPORT', 7500,  now(), 'Xuất Khoai tây', NULL),
+(18, 12, 'EXPORT', 750,   now(), 'Xuất Garlic Sauce', NULL),
+(30, 32, 'EXPORT', 7500,  now(), 'Xuất Cánh Gà chiên', NULL),
+(1,  16, 'EXPORT', 1500,  now(), 'Xuất Bột mì rán gà', NULL),
+(29, 31, 'EXPORT', 750,   now(), 'Xuất Hạt cà phê', NULL),
+(3,  18, 'EXPORT', 3000,  now(), 'Xuất Sữa pha Latte', NULL); 
 
 -- Lưu ý: order 1 & 2 chưa có EXPORT transaction vì receipt còn DRAFT
 -- Lưu ý: order 7 & 8 chưa có EXPORT transaction vì receipt còn DRAFT
