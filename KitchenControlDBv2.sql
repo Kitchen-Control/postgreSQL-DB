@@ -72,16 +72,15 @@ CREATE TYPE "inventories_type" AS ENUM (
     );
 
 CREATE TYPE "receipt_status" AS ENUM (
-  'DRAFT',
-  'COMPLETED',
-  'CANCELED'
+  'READY',
+  'COMPLETED'
 );
 
 CREATE TYPE "deliveries_status" AS ENUM (
     'WAITING',
     'DELIVERING',
 	'DONE',
-	'CANCELED'
+	'CANCEL'
     );
 
 CREATE TYPE "production_plan_status" AS ENUM (
