@@ -715,14 +715,14 @@ INSERT INTO order_details(order_id,product_id,quantity) VALUES
 -- RECEIPTS
 -- =============================
 INSERT INTO receipts(receipt_code,order_id,status,note) VALUES
-('PXK-001', 1, 'DRAFT',     'Phiếu xuất cho order 1 — đang soạn vì order còn WAITING'),   -- receipt_id=1
-('PXK-002', 2, 'DRAFT',     'Phiếu xuất cho order 2 — đang soạn vì order còn PROCESSING'), -- receipt_id=2
+('PXK-001', 1, 'READY',     'Phiếu xuất cho order 1 — đang soạn vì order còn WAITING'),   -- receipt_id=1
+('PXK-002', 2, 'READY',     'Phiếu xuất cho order 2 — đang soạn vì order còn PROCESSING'), -- receipt_id=2
 ('PXK-003', 3, 'COMPLETED', 'Phiếu xuất cho order 3 — đã xuất kho, order DISPATCHED'),      -- receipt_id=3
 ('PXK-004', 4, 'COMPLETED', 'Phiếu xuất cho order 4 — đã xuất kho, order DELIVERING'),      -- receipt_id=4 [SỬA: DRAFT→COMPLETED]
 ('PXK-005', 5, 'COMPLETED', 'Phiếu xuất cho order 5 — đã xuất kho, order DONE'),            -- receipt_id=5
 ('PXK-006', 6, 'COMPLETED', 'Phiếu xuất cho order 6 — đã xuất kho, order DONE'),            -- receipt_id=6 [SỬA: thêm mới]
-('PXK-007', 7, 'DRAFT',     'Phiếu xuất cho order 7 — đang soạn vì order còn PROCESSING'), -- receipt_id=7 [SỬA: thêm mới]
-('PXK-008', 8, 'DRAFT',     'Phiếu xuất cho order 8 — đang soạn vì order còn WAITING');   -- receipt_id=8 [SỬA: thêm mới]
+('PXK-007', 7, 'READY',     'Phiếu xuất cho order 7 — đang soạn vì order còn PROCESSING'), -- receipt_id=7 [SỬA: thêm mới]
+('PXK-008', 8, 'READY',     'Phiếu xuất cho order 8 — đang soạn vì order còn WAITING');   -- receipt_id=8 [SỬA: thêm mới]
 
 -- =============================
 -- INVENTORY TRANSACTIONS
