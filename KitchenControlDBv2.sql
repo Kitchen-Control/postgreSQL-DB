@@ -50,7 +50,8 @@ CREATE TYPE "orders_status" AS ENUM (
 	'PARTIAL_DELIVERED',
     'DONE',
     'DAMAGED',
-    'CANCELED'
+    'CANCELED',
+	'DELIVERED'
     );
 
 CREATE TYPE "log_batches_enum" AS ENUM (
