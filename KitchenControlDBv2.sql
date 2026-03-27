@@ -14,6 +14,14 @@
 
 -- select * from receipts
 
+-- select * from production_plans
+
+-- select * from log_batches
+
+-- select * from inventories
+
+-- select * from inventory_transactions
+
 /*=========================================================================================================*/
 --CODE FOR RESET DATABASE POSTGRESQL
 -- 1. Xóa sổ toàn bộ Schema public (bao gồm mọi Table, View, Type,...)
