@@ -552,7 +552,8 @@ INSERT INTO production_plans(plan_date,start_date,end_date,status,note) VALUES
 -- [NEW MOCK DATA] Lên kế hoạch sản xuất cho các món tự nấu
 ('2026-03-20', '2026-03-21', '2026-03-22', 'DONE', 'Kế hoạch sản xuất hàng loạt mẻ đáp ứng testing (plan 6)'), -- plan_id = 6
 -- [EXTENDED MOCK DATA] Kế hoạch sản xuất các món mở rộng
-('2026-03-21', '2026-03-22', '2026-03-23', 'DONE', 'Sản xuất mở rộng 8 món mới (plan 7)'); -- plan_id = 7
+('2026-03-21', '2026-03-22', '2026-03-23', 'DONE', 'Sản xuất mở rộng 8 món mới (plan 7)'), -- plan_id = 7
+('2026-03-22', '2026-03-23', '2026-03-24', 'DONE', 'Test - bổ sung thêm duplicate lô!'); -- plan_id = 8 (TEST)
 
 -- =============================
 -- PRODUCTION PLAN DETAILS
@@ -580,7 +581,13 @@ INSERT INTO production_plan_details(plan_id,product_id,quantity,note) VALUES
 (7, 35, 1500, 'Sản xuất French Fries'),
 (7, 36, 1500, 'Sản xuất Garlic Bread'),
 (7, 37, 1500, 'Sản xuất Fried Chicken Wings'),
-(7, 40, 1500, 'Sản xuất Iced Latte');
+(7, 40, 1500, 'Sản xuất Iced Latte'),
+--TEST Thêm lô cho plan 8
+(8, 31, 1500, 'Sản xuất Beef Steak cho plan 8'),
+(8, 32, 1500, 'Sản xuất Spaghetti Bolognese cho plan 8'),
+(8, 33, 1500, 'Sản xuất Margherita Pizza cho plan 8'),
+(8, 34, 1500, 'Sản xuất Chicken Burger cho plan 8'),
+(8, 35, 1500, 'Sản xuất French Fries cho plan 8');
 
 -- =============================
 -- LOG BATCHES
@@ -632,7 +639,13 @@ INSERT INTO log_batches(plan_id,product_id,quantity,production_date,expiry_date,
 (7,    35, 1500, '2026-03-23', '2026-08-20', 'DONE', 'PRODUCTION', now()), -- batch_id = 39 (French Fries)
 (7,    36, 1500, '2026-03-23', '2026-08-20', 'DONE', 'PRODUCTION', now()), -- batch_id = 40 (Garlic Bread)
 (7,    37, 1500, '2026-03-23', '2026-08-20', 'DONE', 'PRODUCTION', now()), -- batch_id = 41 (Fried Chicken Wings)
-(7,    40, 1500, '2026-03-23', '2026-08-20', 'DONE', 'PRODUCTION', now()); -- batch_id = 42 (Iced Latte)
+(7,    40, 1500, '2026-03-23', '2026-08-20', 'DONE', 'PRODUCTION', now()), -- batch_id = 42 (Iced Latte)
+-- TEST lô cho plan 8
+(8,    31, 1500, '2026-03-23', '2026-08-20', 'DONE', 'PRODUCTION', now()),
+(8,    32, 1500, '2026-03-23', '2026-08-20', 'DONE', 'PRODUCTION', now()),
+(8,    33, 1500, '2026-03-23', '2026-08-20', 'DONE', 'PRODUCTION', now()),
+(8,    34, 1500, '2026-03-23', '2026-08-20', 'DONE', 'PRODUCTION', now()),
+(8,    35, 1500, '2026-03-23', '2026-08-20', 'DONE', 'PRODUCTION', now());
 
 -- =============================
 -- INVENTORIES
