@@ -641,11 +641,11 @@ INSERT INTO log_batches(plan_id,product_id,quantity,production_date,expiry_date,
 (7,    37, 1500, '2026-03-23', '2026-08-20', 'DONE', 'PRODUCTION', now()), -- batch_id = 41 (Fried Chicken Wings)
 (7,    40, 1500, '2026-03-23', '2026-08-20', 'DONE', 'PRODUCTION', now()), -- batch_id = 42 (Iced Latte)
 -- TEST lô cho plan 8
-(8,    31, 1500, '2026-03-23', '2026-08-20', 'DONE', 'PRODUCTION', now()),
-(8,    32, 1500, '2026-03-23', '2026-08-20', 'DONE', 'PRODUCTION', now()),
-(8,    33, 1500, '2026-03-23', '2026-08-20', 'DONE', 'PRODUCTION', now()),
-(8,    34, 1500, '2026-03-23', '2026-08-20', 'DONE', 'PRODUCTION', now()),
-(8,    35, 1500, '2026-03-23', '2026-08-20', 'DONE', 'PRODUCTION', now());
+(8,    31, 1500, '2026-03-23', '2026-08-20', 'DONE', 'PRODUCTION', now()), --batch_id = 43
+(8,    32, 1500, '2026-03-23', '2026-08-20', 'DONE', 'PRODUCTION', now()), --batch_id = 44
+(8,    33, 1500, '2026-03-23', '2026-08-20', 'DONE', 'PRODUCTION', now()), --batch_id = 45
+(8,    34, 1500, '2026-03-23', '2026-08-20', 'DONE', 'PRODUCTION', now()), --batch_id = 46
+(8,    35, 1500, '2026-03-23', '2026-08-20', 'DONE', 'PRODUCTION', now()); --batch_id = 47
 
 -- =============================
 -- INVENTORIES
@@ -696,6 +696,13 @@ INSERT INTO inventories(product_id,batch_id,quantity,expiry_date) VALUES
 (36, 40, 1500, '2026-08-20'),
 (37, 41, 1500, '2026-08-20'),
 (40, 42, 1500, '2026-08-20');
+-- TEST thêm duplicate lô
+(31, 43, 1500, '2026-03-23', '2026-08-20'),
+(32, 44, 1500, '2026-03-23', '2026-08-20'),
+(33, 45, 1500, '2026-03-23', '2026-08-20'),
+(34, 46, 1500, '2026-03-23', '2026-08-20'),
+(35, 47, 1500, '2026-03-23', '2026-08-20');
+
 
 -- =============================
 -- DELIVERIES
