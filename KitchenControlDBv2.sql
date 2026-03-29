@@ -95,6 +95,7 @@ CREATE TYPE "deliveries_status" AS ENUM (
 CREATE TYPE "production_plan_status" AS ENUM (
 	'DRAFT',
 	'WAITING',
+	'DISPATCHED',
     'PROCESSING',
 	'COMPLETE_ONE_SECTION',
 	'DONE',
