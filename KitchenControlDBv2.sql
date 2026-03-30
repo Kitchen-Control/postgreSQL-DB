@@ -35,7 +35,7 @@ CREATE SCHEMA public;
 -- 3. Cấp lại quyền truy cập cho user của bạn (User trong ảnh bạn gửi)
 GRANT ALL ON SCHEMA public TO public;
 -- GRANT ALL ON SCHEMA public TO central_kitchen_user;
-GRANT ALL ON SCHEMA public TO kitchencontroldb_user;
+GRANT ALL ON SCHEMA public TO kitchencontroldb_ql8e_user;
 
 COMMIT;
 /*=========================================================================================================*/
